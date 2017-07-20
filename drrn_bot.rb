@@ -1,6 +1,7 @@
 require 'telegram/bot'
 require 'net/http'
 
+start_time = Time.now
 token = File.read('data/token.txt', encoding: 'UTF-8')
 
 def help_msg
@@ -79,7 +80,7 @@ def handle_message(message, bot)
 		when '/update_and_restart'
 			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
 			sleep 5
-			abort # просто пристрелить себя, демон сам все сделает
+			raise 'Перегрузись.'
 		when '/roll'
 			'Че кидать-то будем?'
 		when /\/roll\s\d+d\d+/
