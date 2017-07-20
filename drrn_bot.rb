@@ -76,6 +76,12 @@ def handle_message(message, bot)
 			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
+		when '/update_and_restart'
+			job1 = Process.fork do
+			  exec 'ruby starter.rb'
+			end
+			Process.detach(job1)
+			abort
 		when '/roll'
 			'Че кидать-то будем?'
 		when /\/roll\s\d+d\d+/
