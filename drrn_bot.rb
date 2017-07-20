@@ -81,7 +81,7 @@ def handle_message(message, bot)
 		when '/update_and_restart'
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
-				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{60 - delta} секунд."
+				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
 			end
 			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
 			sleep 5
