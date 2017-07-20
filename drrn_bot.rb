@@ -66,7 +66,7 @@ def handle_message(message, bot)
 			'Сам себе вжухай.'
 		when /Now you.+thinking with portals!/, '/portals'
 			# 'Шас жахнет!'
-			bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
+			bot.api.send_photo(chat_id: message.chat.id, photo: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
 			# nil
 		when '/for_the_emperor', 'За Императора!'
 			wh40kquote
