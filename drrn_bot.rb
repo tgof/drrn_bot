@@ -64,7 +64,7 @@ def handle_message(message, bot)
 			'Сам себе вжухай.'
 		when /Now you.+thinking with portals!/, '/portals'
 			# 'Шас жахнет!'
-			bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
+			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, рестартуюсь.', reply_to_message_id: message.message_id)
 			# nil
 		when '/for_the_emperor', 'За Императора!'
 			wh40kquote
@@ -77,6 +77,7 @@ def handle_message(message, bot)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
 		when '/update_and_restart'
+			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
 			abort # просто пристрелить себя, демон сам все сделает
 		when '/roll'
 			'Че кидать-то будем?'
