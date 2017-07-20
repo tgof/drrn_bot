@@ -1,6 +1,8 @@
 require 'telegram/bot'
 require 'net/http'
 
+$start_time = Time.now
+
 token = File.read('data/token.txt', encoding: 'UTF-8')
 
 def help_msg
@@ -77,6 +79,9 @@ def handle_message(message, bot)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
 		when '/update_and_restart'
+			if (Time.now - $start_time) < 60 # если перегружались меньше минуты назад
+				return "Теперь мы тут: #{%x{git show --oneline -s}}"
+			end
 			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
 			sleep 5
 			abort # просто пристрелить себя, демон сам все сделает
