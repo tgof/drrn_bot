@@ -1,6 +1,8 @@
 require 'telegram/bot'
 require 'net/http'
 
+$start_time = Time.now
+
 token = File.read('data/token.txt', encoding: 'UTF-8')
 
 def help_msg
@@ -64,7 +66,7 @@ def handle_message(message, bot)
 			'Сам себе вжухай.'
 		when /Now you.+thinking with portals!/, '/portals'
 			# 'Шас жахнет!'
-			bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
+			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, рестартуюсь.', reply_to_message_id: message.message_id)
 			# nil
 		when '/for_the_emperor', 'За Императора!'
 			wh40kquote
@@ -76,6 +78,14 @@ def handle_message(message, bot)
 			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
+		when '/update_and_restart'
+			delta = Time.now - $start_time
+			if delta < 60 # если перегружались меньше минуты назад
+				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
+			end
+			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
+			sleep 5
+			abort # просто пристрелить себя, демон сам все сделает
 		when '/roll'
 			'Че кидать-то будем?'
 		when /\/roll\s\d+d\d+/
