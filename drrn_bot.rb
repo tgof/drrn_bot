@@ -78,6 +78,7 @@ def handle_message(message, bot)
 			nil
 		when '/update_and_restart'
 			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
+			sleep 5
 			abort # просто пристрелить себя, демон сам все сделает
 		when '/roll'
 			'Че кидать-то будем?'
