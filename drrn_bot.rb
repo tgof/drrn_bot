@@ -70,8 +70,8 @@ def handle_message(message, bot)
 			'Сам себе вжухай.'
 		when '/tableflip', '/cppref'
 			tableflip_str
-		when /\/tableflip\s.+/
-			query = text.sub(/\/tableflip\s.+/, '')
+		when /\/tableflip\s+.+/
+			query = text.sub(/\/tableflip\s+/, '')
 			"#{query} #{tableflip_str}"
 		when /Now you.+thinking with portals!/, '/portals'
 			'Шас жахнет!'
