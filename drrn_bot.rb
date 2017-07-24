@@ -34,6 +34,10 @@ def roll(text)
 	end
 end
 
+def tableflip_str
+	@tableflip_str ||= '(╯°□°）╯︵ ┻━┻'
+end
+
 def qr_it(message, bot)
 	query = message.text.sub(/\/qr_it\s+/,'')
 	url = qr_url(query)
@@ -65,7 +69,10 @@ def handle_message(message, bot)
 		when '/vzhuh'
 			'Сам себе вжухай.'
 		when '/tableflip', '/cppref'
-			'(╯°□°）╯︵ ┻━┻'
+			tableflip_str
+		when /\/tableflip\s.+/
+			query = text.sub(/\/tableflip\s.+/, '')
+			"#{query} #{tableflip_str}"
 		when /Now you.+thinking with portals!/, '/portals'
 			'Шас жахнет!'
 			# bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
@@ -103,7 +110,7 @@ def handle_inline(message, bot)
 	i = 1
 	results = [
 		[(i += 1), 'Пожать плечами', "#{query} ¯\\_(ツ)_/¯"],
-		[(i += 1), 'Перевернуть стол!', "#{query} (╯°□°）╯︵ ┻━┻"],
+		[(i += 1), 'Перевернуть стол!', "#{query} #{tableflip_str}"],
 		[(i += 1), 'За Императора!', wh40kquote]
 	]
 	results << [(i += 1), '...чертов гук!', goddamn_guk(query)] if query.size > 0
