@@ -64,6 +64,8 @@ def handle_message(message, bot)
 			qr_it(message, bot)
 		when '/vzhuh'
 			'Сам себе вжухай.'
+		when '/tableflip', '/cppref'
+			'(╯°□°）╯︵ ┻━┻'
 		when /Now you.+thinking with portals!/, '/portals'
 			'Шас жахнет!'
 			# bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
