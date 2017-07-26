@@ -166,7 +166,7 @@ Telegram::Bot::Client.run(token) do |bot|
 			# Here you can handle your callbacks from inline buttons
 			res = handle_callback(message, bot)
 			begin
-				bot.api.send_message(chat_id: message.data.split(?~).first, text: res) if res.is_a? String
+				bot.api.edit_message_text(chat_id: message.data.split(?~).first, message_id: message.message.message_id, text: res) if res.is_a? String
 			rescue => e then puts(e)
 			end
 		end
