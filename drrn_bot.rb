@@ -55,6 +55,15 @@ def wh40kquote
 	@quotes.sample
 end
 
+def vzhuh_str(mes)
+%Q{``` ∧＿∧
+( ･ω･｡)つ━☆・*。
+⊂　 ノ 　　　・゜+.
+しーＪ　　　°。+ *´¨)
+　　　　　　　　　.· ´¸.·*´¨) ¸.·*¨)
+　　　　　　　　　　(¸.·´ (¸.·'* ☆#{mes}```}
+end
+
 def handle_message(message, bot)
 	begin
 		p text = message.text && message.text.gsub('@drrn_bot','').strip
@@ -67,8 +76,9 @@ def handle_message(message, bot)
 			help_msg
 		when /\/qr_it\s.+/
 			qr_it(message, bot)
-		when '/vzhuh'
-			'Сам себе вжухай.'
+		when /\/vzhuh\s+.+/
+			query = text.sub(/\/vzhuh\s+/, '')
+			vzhuh_str(query)
 		when '/tableflip', '/cppref'
 			tableflip_str
 		when /\/tableflip\s+.+/
