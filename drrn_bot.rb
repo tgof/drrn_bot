@@ -78,7 +78,9 @@ def handle_message(message, bot)
 			qr_it(message, bot)
 		when /\/vzhuh\s+.+/
 			query = text.sub(/\/vzhuh\s+/, '')
-			vzhuh_str(query)
+			res = vzhuh_str(query)
+			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
+			nil
 		when '/tableflip', '/cppref'
 			tableflip_str
 		when /\/tableflip\s+.+/
