@@ -125,16 +125,14 @@ def handle_inline(message, bot)
 	results = [
 		[(i += 1), 'Пожать плечами', "#{query} ¯\\_(ツ)_/¯"],
 		[(i += 1), 'Перевернуть стол!', "#{query} #{tableflip_str}"],
-		[(i += 1), 'За Императора!', wh40kquote],
-		[(i += 1), 'Вжух!', vzhuh_str(query)],
+		[(i += 1), 'За Императора!', wh40kquote]
 	]
 	results << [(i += 1), '...чертов гук!', goddamn_guk(query)] if query.size > 0
 	results.map do |arr|
 		Telegram::Bot::Types::InlineQueryResultArticle.new(
 			id: arr[0],
 			title: arr[1],
-			input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: arr[2]),
-			parse_mode: 'Markdown'
+			input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: arr[2])
 		)
 	end
 end
