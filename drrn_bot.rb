@@ -11,6 +11,7 @@ def help_msg
 	* /for_the_emperor - Мотивирующая фраза от вашего лорда-комиссара.
 	* /qr_it - Сделать qr-код.
 	* /tableflip - Переверни стол!
+	* /vzhuh - Вжух!
 	* Нихуя
 А еще я сплю большую часть времени.
 }
@@ -55,6 +56,15 @@ def wh40kquote
 	@quotes.sample
 end
 
+def vzhuh_str(mes)
+%Q{``` ∧＿∧
+( ･ω･｡)つ━☆・*。
+⊂　 ノ 　　　・゜+.
+しーＪ　　　°。+ *´¨)
+　　　　　　　　　.· ´¸.·*´¨) ¸.·*¨)
+　　　　　　　　　　(¸.·´ (¸.·'* ☆ #{mes}```}
+end
+
 def handle_message(message, bot)
 	begin
 		p text = message.text && message.text.gsub('@drrn_bot','').strip
@@ -67,8 +77,11 @@ def handle_message(message, bot)
 			help_msg
 		when /\/qr_it\s.+/
 			qr_it(message, bot)
-		when '/vzhuh'
-			'Сам себе вжухай.'
+		when /\/vzhuh\s+.+/
+			query = text.sub(/\/vzhuh\s+/, '')
+			res = vzhuh_str(query)
+			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
+			nil
 		when '/tableflip', '/cppref'
 			tableflip_str
 		when /\/tableflip\s+.+/
@@ -88,10 +101,16 @@ def handle_message(message, bot)
 			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
-		when '/update_and_restart'
+		when /\/update_and_restart\s+.+/
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
 				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
+			end
+			query = text.sub(/\/update_and_restart\s+/, '')
+			if query.size > 0
+				bot.api.send_message(chat_id: message.chat.id, text: "Пробуем чекаутить #{query}")
+				res = %x{git checkout #{query}}
+				bot.api.send_message(chat_id: message.chat.id, text: res)
 			end
 			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
 			sleep 5
