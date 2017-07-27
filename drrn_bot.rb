@@ -133,7 +133,8 @@ def handle_inline(message, bot)
 		Telegram::Bot::Types::InlineQueryResultArticle.new(
 			id: arr[0],
 			title: arr[1],
-			input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: arr[2])
+			input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: arr[2]),
+			parse_mode: 'Markdown'
 		)
 	end
 end
