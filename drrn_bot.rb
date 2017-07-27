@@ -11,6 +11,7 @@ def help_msg
 	* /for_the_emperor - Мотивирующая фраза от вашего лорда-комиссара.
 	* /qr_it - Сделать qr-код.
 	* /tableflip - Переверни стол!
+	* /vzhuh - Вжух!
 	* Нихуя
 А еще я сплю большую часть времени.
 }
@@ -61,7 +62,7 @@ def vzhuh_str(mes)
 ⊂　 ノ 　　　・゜+.
 しーＪ　　　°。+ *´¨)
 　　　　　　　　　.· ´¸.·*´¨) ¸.·*¨)
-　　　　　　　　　　(¸.·´ (¸.·'* ☆#{mes}```}
+　　　　　　　　　　(¸.·´ (¸.·'* ☆ #{mes}```}
 end
 
 def handle_message(message, bot)
@@ -124,7 +125,8 @@ def handle_inline(message, bot)
 	results = [
 		[(i += 1), 'Пожать плечами', "#{query} ¯\\_(ツ)_/¯"],
 		[(i += 1), 'Перевернуть стол!', "#{query} #{tableflip_str}"],
-		[(i += 1), 'За Императора!', wh40kquote]
+		[(i += 1), 'За Императора!', wh40kquote],
+		[(i += 1), 'Вжух!', vzhuh_str(query)],
 	]
 	results << [(i += 1), '...чертов гук!', goddamn_guk(query)] if query.size > 0
 	results.map do |arr|
