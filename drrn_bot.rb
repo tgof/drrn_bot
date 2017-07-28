@@ -5,7 +5,7 @@ $start_time = Time.now
 
 $token = File.read('data/token.txt', encoding: 'UTF-8')
 $drrn_id = File.read('data/drrn_id.txt').to_i
-$admin_ids = File.read('data/admins.txt').split("\n").map.to_i.compact
+$admin_ids = File.read('data/admins.txt').split("\n").map(&:to_i).compact
 
 def help_msg
 %Q{Я умею:
