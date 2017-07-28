@@ -78,7 +78,7 @@ def handle_message(message, bot)
 			help_msg
 		when /\/qr_it\s.+/
 			qr_it(message, bot)
-		when /\/vzhuh\s+.+/
+		when /\/vzhuh\s+.?/
 			query = text.sub(/\/vzhuh\s+/, '')
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
@@ -103,6 +103,8 @@ def handle_message(message, bot)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
 		when /\/update_and_restart\s+.+/
+			p message.from.id
+			p message.from.id.class
 			return 'Пошел нахуй.' unless message.from.id == drrn_id
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
