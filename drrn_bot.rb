@@ -3,7 +3,8 @@ require 'net/http'
 
 $start_time = Time.now
 
-token = File.read('data/token.txt', encoding: 'UTF-8')
+$token = File.read('data/token.txt', encoding: 'UTF-8')
+$drrn_id = File.read('drrn_id.txt').to_i
 
 def help_msg
 %Q{Я умею:
@@ -102,6 +103,7 @@ def handle_message(message, bot)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
 		when /\/update_and_restart\s+.+/
+			return 'Пошел нахуй.' unless message.from.id == drrn_id
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
 				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
@@ -166,7 +168,7 @@ def handle_callback(message, bot)
 	end
 end
 
-Telegram::Bot::Client.run(token) do |bot|
+Telegram::Bot::Client.run($token) do |bot|
 	bot.listen do |message|
 		case message
 		when Telegram::Bot::Types::InlineQuery
