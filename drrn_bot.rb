@@ -4,7 +4,7 @@ require 'net/http'
 $start_time = Time.now
 
 $token = File.read('data/token.txt', encoding: 'UTF-8')
-$drrn_id = File.read('drrn_id.txt').to_i
+$drrn_id = File.read('data/drrn_id.txt').to_i
 
 def help_msg
 %Q{Я умею:
