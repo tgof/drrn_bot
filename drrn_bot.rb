@@ -102,7 +102,7 @@ def handle_message(message, bot)
 			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
-		when /\/update_and_restart\s+.+/
+		when /\/update_and_restart\s+.?/
 			p message.from.id
 			p message.from.id.class
 			return 'Пошел нахуй.' unless message.from.id == drrn_id
