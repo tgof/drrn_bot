@@ -105,7 +105,7 @@ def handle_message(message, bot)
 		when /\/update_and_restart\s?.?/
 			p message.from.id
 			p message.from.id.class
-			return 'Пошел нахуй.' unless message.from.id == drrn_id
+			return 'Пошел нахуй.' unless message.from.id == $drrn_id
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
 				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
