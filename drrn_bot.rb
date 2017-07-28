@@ -5,6 +5,7 @@ $start_time = Time.now
 
 $token = File.read('data/token.txt', encoding: 'UTF-8')
 $drrn_id = File.read('data/drrn_id.txt').to_i
+$admin_ids = File.read('data/admins.txt').split("\n").map.to_i.compact
 
 def help_msg
 %Q{Я умею:
@@ -103,9 +104,7 @@ def handle_message(message, bot)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
 		when /\/update_and_restart\s?.?/
-			p message.from.id
-			p message.from.id.class
-			return 'Пошел нахуй.' unless message.from.id == $drrn_id
+			return 'Пошел нахуй.' unless $admin_ids.include?(message.from.id)
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
 				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
