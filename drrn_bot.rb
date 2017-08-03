@@ -137,6 +137,7 @@ def handle_inline(message, bot)
 		[(i += 1), 'За Императора!', wh40kquote]
 	]
 	results << [(i += 1), '...чертов гук!', goddamn_guk(query)] if query.size > 0
+	results << [(i += 1), 'Больлше Х богу Х!', "Больше #{query} богу #{query}!"] if query.size > 0
 	results.map do |arr|
 		Telegram::Bot::Types::InlineQueryResultArticle.new(
 			id: arr[0],
