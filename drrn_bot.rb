@@ -77,17 +77,15 @@ def handle_message(message, bot)
 			"Покеда, #{message.from.first_name}"
 		when '/help'
 			help_msg
-		when /\/qr_it\s.+/
+		when /\/qr_it\s*.+/
 			qr_it(message, bot)
-		when /\/vzhuh\s?.?/
+		when /\/vzhuh\s*.*/
 			query = text.sub(/\/vzhuh\s?/, '')
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 			nil
-		when '/cppref'
-			tableflip_str
-		when /\/tableflip\s?.?/
-			query = text.sub(/\/tableflip\s?/, '')
+		when /\/[cppref|tableflip]\s*.*/
+			query = text.sub(/\/[cppref|tableflip]\s?/, '')
 			"#{query} #{tableflip_str}"
 		when /Now you.+thinking with portals!/, '/portals'
 			'Шас жахнет!'
@@ -103,13 +101,13 @@ def handle_message(message, bot)
 			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
-		when /\/update_and_restart\s?.?/
+		when /\/update_and_restart\s*.*/
 			return 'Пошел нахуй.' unless $admin_ids.include?(message.from.id)
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
 				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
 			end
-			query = text.sub(/\/update_and_restart\s?/, '')
+			query = text.sub(/\/update_and_restart\s*/, '')
 			if query.size > 0
 				bot.api.send_message(chat_id: message.chat.id, text: "Пробуем чекаутить #{query}")
 				res = %x{git checkout #{query}}
