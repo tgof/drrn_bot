@@ -80,12 +80,12 @@ def handle_message(message, bot)
 		when /\/qr_it\s*.+/
 			qr_it(message, bot)
 		when /\/vzhuh\s*.*/
-			query = text.sub(/\/vzhuh\s?/, '')
+			query = text.sub(/\/vzhuh\s*/, '')
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 			nil
-		when /\/[cppref|tableflip]\s*.*/
-			query = text.sub(/\/[cppref|tableflip]\s?/, '')
+		when /\/(cppref|tableflip)\s*.*/
+			query = text.sub(/\/(cppref|tableflip)\s*/, '')
 			"#{query} #{tableflip_str}"
 		when /Now you.+thinking with portals!/, '/portals'
 			'Шас жахнет!'
