@@ -71,11 +71,11 @@ def handle_message(message, bot)
 	begin
 		p text = message.text
 		case text
-		when /\/start(@drrn_bot)?/
+		when /\/start(@drrn_bot)?$/
 			"Ну привет, #{message.from.first_name}"
-		when /\/stop(@drrn_bot)?/
+		when /\/stop(@drrn_bot)?$/
 			"Покеда, #{message.from.first_name}"
-		when /\/help(@drrn_bot)?/
+		when /\/help(@drrn_bot)?$/
 			help_msg
 		when /^\/qr_it(@drrn_bot)?\s+.+/
 			qr_it(message, bot)
@@ -91,9 +91,9 @@ def handle_message(message, bot)
 			'Шас жахнет!'
 			# bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
 			# nil
-		when /\/for_the_emperor(@drrn_bot)?/, 'За Императора!'
+		when /\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
 			wh40kquote
-		when /\/heresy(@drrn_bot)?/
+		when /\/heresy(@drrn_bot)?$/
 			kb = [
 				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Да', callback_data: "#{message.chat.id}~ересь"),
 				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Нет', callback_data: "#{message.chat.id}~не ересь")
@@ -105,7 +105,7 @@ def handle_message(message, bot)
 			return 'Пошел нахуй.' unless $admin_ids.include?(message.from.id)
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
-				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
+				return "Сейчас мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
 			end
 			query = text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
 			if query.size > 0
