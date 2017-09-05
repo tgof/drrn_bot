@@ -77,14 +77,14 @@ def handle_message(message, bot)
 			"Покеда, #{message.from.first_name}"
 		when '/help'
 			help_msg
-		when /\/qr_it\s*.+/
+		when /\/qr_it\s+.+/
 			qr_it(message, bot)
-		when /\/vzhuh\s*.*/
+		when /\/vzhuh\s+.*/, '/vzhuh'
 			query = text.sub(/\/vzhuh\s*/, '')
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 			nil
-		when /\/(cppref|tableflip)\s*.*/
+		when /\/(cppref|tableflip)\s+.*/, '/tableflip', '/cppref' 
 			query = text.sub(/\/(cppref|tableflip)\s*/, '')
 			"#{query} #{tableflip_str}"
 		when /Now you.+thinking with portals!/, '/portals'
@@ -118,7 +118,7 @@ def handle_message(message, bot)
 			abort # просто пристрелить себя, демон сам все сделает
 		when '/roll'
 			'Че кидать-то будем?'
-		when /\/roll\s\d+d\d+/
+		when /\/roll\s+\d+d\d+/
 			roll(text)
 		end
 	rescue => e then
