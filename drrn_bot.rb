@@ -85,7 +85,7 @@ def handle_message(message, bot)
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 			nil
-		when /\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, '/tableflip', '/cppref' 
+		when /\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
 			query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
 			"#{query} #{tableflip_str}"
 		when /Now you.+thinking with portals!/, /\/portals(@drrn_bot)?/
