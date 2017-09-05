@@ -43,7 +43,7 @@ def tableflip_str
 end
 
 def qr_it(message, bot)
-	query = message.text.sub(/\/qr_it\s+/,'')
+	query = message.text.sub(/\/qr_it(@drrn_bot)?\s+/,'')
 	url = qr_url(query)
 	bot.api.send_photo(chat_id: message.chat.id, photo: url, reply_to_message_id: message.message_id)
 	nil
@@ -69,31 +69,31 @@ end
 
 def handle_message(message, bot)
 	begin
-		p text = message.text && message.text.gsub('@drrn_bot','').strip
+		p text = message.text
 		case text
-		when '/start'
+		when /\/start(@drrn_bot)?/
 			"Ну привет, #{message.from.first_name}"
-		when '/stop'
+		when /\/stop(@drrn_bot)?/
 			"Покеда, #{message.from.first_name}"
-		when '/help'
+		when /\/help(@drrn_bot)?/
 			help_msg
-		when /\/qr_it\s+.+/
+		when /^\/qr_it(@drrn_bot)?\s+.+/
 			qr_it(message, bot)
-		when /\/vzhuh\s+.*/, '/vzhuh'
-			query = text.sub(/\/vzhuh\s*/, '')
+		when /^\/vzhuh(@drrn_bot)?(\s+.*|$)/, '/vzhuh'
+			query = text.sub(/\/vzhuh(@drrn_bot)?\s*/, '')
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 			nil
-		when /\/(cppref|tableflip)\s+.*/, '/tableflip', '/cppref' 
-			query = text.sub(/\/(cppref|tableflip)\s*/, '')
+		when /\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, '/tableflip', '/cppref' 
+			query = text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
 			"#{query} #{tableflip_str}"
-		when /Now you.+thinking with portals!/, '/portals'
+		when /Now you.+thinking with portals!/, /\/portals(@drrn_bot)?/
 			'Шас жахнет!'
 			# bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
 			# nil
-		when '/for_the_emperor', 'За Императора!'
+		when /\/for_the_emperor(@drrn_bot)?/, 'За Императора!'
 			wh40kquote
-		when '/heresy'
+		when /\/heresy(@drrn_bot)?/
 			kb = [
 				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Да', callback_data: "#{message.chat.id}~ересь"),
 				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Нет', callback_data: "#{message.chat.id}~не ересь")
@@ -101,13 +101,13 @@ def handle_message(message, bot)
 			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
-		when /\/update_and_restart\s*.*/
+		when /\/update_and_restart(@drrn_bot)?(\s+.*|$)/
 			return 'Пошел нахуй.' unless $admin_ids.include?(message.from.id)
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
 				return "Теперь мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
 			end
-			query = text.sub(/\/update_and_restart\s*/, '')
+			query = text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
 			if query.size > 0
 				bot.api.send_message(chat_id: message.chat.id, text: "Пробуем чекаутить #{query}")
 				res = %x{git checkout #{query}}
@@ -116,9 +116,9 @@ def handle_message(message, bot)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
 			sleep 5
 			abort # просто пристрелить себя, демон сам все сделает
-		when '/roll'
+		when /\/roll(@drrn_bot)?\s*$/
 			'Че кидать-то будем?'
-		when /\/roll\s+\d+d\d+/
+		when /\/roll(@drrn_bot)?\s+\d+d\d+/
 			roll(text)
 		end
 	rescue => e then
