@@ -80,7 +80,8 @@ def handle_message(message, bot)
 			help_msg
 		when /^\/qr_it(@drrn_bot)?\s+.+/
 			qr_it(message, bot)
-		when /^\/vzhuh(@drrn_bot)?(\s+.*|$)/, '/vzhuh'
+		when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
+			return 'Сам себе вжухай!' if rand > 0.9
 			query = message.text.sub(/\/vzhuh(@drrn_bot)?\s*/, '')
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
