@@ -69,8 +69,9 @@ end
 
 def handle_message(message, bot)
 	begin
-		p text = message.text
-		case text
+		text = message.text
+		p "#{message.from.first_name} #{message.text.inspect}"
+		case message.text
 		when /\/start(@drrn_bot)?$/
 			"Ну привет, #{message.from.first_name}"
 		when /\/stop(@drrn_bot)?$/
@@ -80,12 +81,12 @@ def handle_message(message, bot)
 		when /^\/qr_it(@drrn_bot)?\s+.+/
 			qr_it(message, bot)
 		when /^\/vzhuh(@drrn_bot)?(\s+.*|$)/, '/vzhuh'
-			query = text.sub(/\/vzhuh(@drrn_bot)?\s*/, '')
+			query = message.text.sub(/\/vzhuh(@drrn_bot)?\s*/, '')
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 			nil
 		when /\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, '/tableflip', '/cppref' 
-			query = text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
+			query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
 			"#{query} #{tableflip_str}"
 		when /Now you.+thinking with portals!/, /\/portals(@drrn_bot)?/
 			'Шас жахнет!'
@@ -107,7 +108,7 @@ def handle_message(message, bot)
 			if delta < 60 # если перегружались меньше минуты назад
 				return "Сейчас мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
 			end
-			query = text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
+			query = message.text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
 			if query.size > 0
 				bot.api.send_message(chat_id: message.chat.id, text: "Пробуем чекаутить #{query}")
 				res = %x{git checkout #{query}}
@@ -119,7 +120,8 @@ def handle_message(message, bot)
 		when /\/roll(@drrn_bot)?\s*$/
 			'Че кидать-то будем?'
 		when /\/roll(@drrn_bot)?\s+\d+d\d+/
-			roll(text)
+			query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
+			roll(query)
 		end
 	rescue => e then
 		e.to_s
