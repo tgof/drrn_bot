@@ -14,6 +14,7 @@ def help_msg
 	* /qr_it - Сделать qr-код.
 	* /tableflip - Переверни стол!
 	* /vzhuh - Вжух!
+	* /shrug - пожми плечами
 	* Нихуя
 А еще я сплю большую часть времени.
 }
@@ -86,6 +87,9 @@ def handle_message(message, bot)
 			res = vzhuh_str(query)
 			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 			nil
+		when /^\/shrug(@drrn_bot)?(\s+.*|$)/
+			query = message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
+			"#{query}¯\\_(ツ)_/¯"
 		when /\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
 			query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
 			"#{query} #{tableflip_str}"
