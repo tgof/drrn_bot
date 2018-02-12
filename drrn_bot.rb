@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'telegram/bot'
 require 'net/http'
 
@@ -71,7 +72,7 @@ end
 def handle_message(message, bot)
 	begin
 		text = message.text
-		puts "#{message.from.first_name}: #{message.text.inspect}"
+		puts "#{message.from.first_name}: #{message.text}"
 		case message.text
 		when /\/start(@drrn_bot)?$/
 			"Ну привет, #{message.from.first_name}"
