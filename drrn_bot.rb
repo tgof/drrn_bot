@@ -24,6 +24,10 @@ end
 def roll(text)
 	res = text.scan(/\d+/).map(&:to_i)
 	p res
+	if condition = text.scan(/[\>\<\=]\s*\d+/).first
+		target = res[-1]
+		res = res[0..-2]
+	end
 	if res.size == 2
 		rolls = []
 		return 'Куда тебе столько, ебанутый?' if res[0] > 1000
@@ -34,7 +38,14 @@ def roll(text)
 		sum = rolls.inject(0) do |res, x|
 			res + x
 		end
-		"Бросок #{res[0]}d#{res[1]}: #{sum} (#{rolls.join(', ')})."
+		check_result = if condition
+			method = condition.scan(/[\>\<\=]/)
+			method = '==' if method == '='
+			rolls.select{|x| x.send(method.to_sym, target)}.size
+		end
+		text = "Бросок #{res[0]}d#{res[1]}: #{sum} (#{rolls.join(', ')})."
+		text += "Успехов: #{check_result}." if check_result
+		text
 	else
 		return 'Че-то ты криво рольнул.'
 	end
@@ -125,7 +136,7 @@ def handle_message(message, bot)
 			abort # просто пристрелить себя, демон сам все сделает
 		when /\/roll(@drrn_bot)?\s*$/
 			'Че кидать-то будем?'
-		when /\/roll(@drrn_bot)?\s+\d+d\d+/
+		when /\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=]\d+)?/
 			query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
 			roll(query)
 		end
