@@ -48,7 +48,7 @@ def roll(text)
 			rolls.select { |x| x.send(method.to_sym, target) }.size
 		end
 		text = "Бросок #{res[0]}d#{res[1]}: #{sum} (#{rolls.join(', ')})."
-		text += "Успехов: #{check_result}." if check_result
+		text += " Успехов: #{check_result}." if check_result
 		text
 	else
 		return 'Че-то ты криво рольнул.'
