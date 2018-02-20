@@ -39,7 +39,7 @@ def roll(text)
 			res + x
 		end
 		check_result = if condition
-			method = condition.scan(/[\>\<\=]/)
+			method = condition.scan(/[\>\<\=]/).first
 			method = '==' if method == '='
 			rolls.select{|x| x.send(method.to_sym, target)}.size
 		end
