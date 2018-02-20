@@ -85,11 +85,11 @@ def handle_message(message, bot)
 		text = message.text
 		puts "#{message.from.first_name}: #{message.text}"
 		case message.text
-		when /\/start(@drrn_bot)?$/
+		when /^\/start(@drrn_bot)?$/
 			"Ну привет, #{message.from.first_name}"
-		when /\/stop(@drrn_bot)?$/
+		when /^\/stop(@drrn_bot)?$/
 			"Покеда, #{message.from.first_name}"
-		when /\/help(@drrn_bot)?$/
+		when /^\/help(@drrn_bot)?$/
 			help_msg
 		when /^\/qr_it(@drrn_bot)?\s+.+/
 			qr_it(message, bot)
@@ -102,16 +102,16 @@ def handle_message(message, bot)
 		when /^\/shrug(@drrn_bot)?(\s+.*|$)/
 			query = message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
 			"#{query}¯\\_(ツ)_/¯"
-		when /\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
+		when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
 			query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
 			"#{query} #{tableflip_str}"
-		when /Now you.+thinking with portals!/, /\/portals(@drrn_bot)?/
+		when /Now you.+thinking with portals!/, /^\/portals(@drrn_bot)?/
 			'Шас жахнет!'
-			# bot.api.send_sticker(chat_id: message.chat.id, sticker: 'CAADAgADEgAD3Q_4SCfsQNkInMIsAg')
-			# nil
-		when /\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
+		when /^\/uptime(@drrn_bot)?/
+			"Я не сплю с #{$start_time} (Целых #{Time.now - $start_time} секунд!) Я крут!"
+		when /^\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
 			wh40kquote
-		when /\/heresy(@drrn_bot)?$/
+		when /^\/heresy(@drrn_bot)?$/
 			kb = [
 				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Да', callback_data: "#{message.chat.id}~ересь"),
 				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Нет', callback_data: "#{message.chat.id}~не ересь")
@@ -119,7 +119,7 @@ def handle_message(message, bot)
 			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
 			nil
-		when /\/update_and_restart(@drrn_bot)?(\s+.*|$)/
+		when /^\/update_and_restart(@drrn_bot)?(\s+.*|$)/
 			return 'Пошел нахуй.' unless $admin_ids.include?(message.from.id)
 			delta = Time.now - $start_time
 			if delta < 60 # если перегружались меньше минуты назад
@@ -134,9 +134,9 @@ def handle_message(message, bot)
 			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
 			sleep 5
 			abort # просто пристрелить себя, демон сам все сделает
-		when /\/roll(@drrn_bot)?\s*$/
+		when /^\/roll(@drrn_bot)?\s*$/
 			'Че кидать-то будем?'
-		when /\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=]\d+)?/
+		when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=]\d+)?/
 			query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
 			roll(query)
 		end
