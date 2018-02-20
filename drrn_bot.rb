@@ -2,14 +2,18 @@
 require 'telegram/bot'
 require 'net/http'
 
-$start_time = Time.now
+def start_time
+	@start_time ||= Time.now
+end
+puts start_time
 
-$token = File.read('data/token.txt', encoding: 'UTF-8')
-$drrn_id = File.read('data/drrn_id.txt').to_i
-$admin_ids = File.read('data/admins.txt').split("\n").map(&:to_i).compact
+token = File.read('data/token.txt', encoding: 'UTF-8')
+def admin_ids
+	@admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
+end
 
 def help_msg
-%Q{Я умею:
+%q{Я умею:
 	* /roll 3d6 - брось дайсы!
 	* /for_the_emperor - Мотивирующая фраза от вашего лорда-комиссара.
 	* /qr_it - Сделать qr-код.
@@ -32,16 +36,16 @@ def roll(text)
 		rolls = []
 		return 'Куда тебе столько, ебанутый?' if res[0] > 1000
 		return 'Нуль себе дерни, пес' if res[1] == 0
-		res[0].times do |n|
+		res[0].times do |_|
 			rolls << rand(res[1]) + 1
 		end
-		sum = rolls.inject(0) do |res, x|
-			res + x
+		sum = rolls.inject(0) do |r, x|
+			r + x
 		end
 		check_result = if condition
 			method = condition.scan(/[\>\<\=]/).first
 			method = '==' if method == '='
-			rolls.select{|x| x.send(method.to_sym, target)}.size
+			rolls.select { |x| x.send(method.to_sym, target) }.size
 		end
 		text = "Бросок #{res[0]}d#{res[1]}: #{sum} (#{rolls.join(', ')})."
 		text += "Успехов: #{check_result}." if check_result
@@ -81,68 +85,65 @@ def vzhuh_str(mes)
 end
 
 def handle_message(message, bot)
-	begin
-		text = message.text
-		puts "#{message.from.first_name}: #{message.text}"
-		case message.text
-		when /^\/start(@drrn_bot)?$/
-			"Ну привет, #{message.from.first_name}"
-		when /^\/stop(@drrn_bot)?$/
-			"Покеда, #{message.from.first_name}"
-		when /^\/help(@drrn_bot)?$/
-			help_msg
-		when /^\/qr_it(@drrn_bot)?\s+.+/
-			qr_it(message, bot)
-		when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
-			return 'Сам себе вжухай!' if rand > 0.9
-			query = message.text.sub(/\/(vzhuh|magic)(@drrn_bot)?\s*/, '')
-			res = vzhuh_str(query)
-			bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
-			nil
-		when /^\/shrug(@drrn_bot)?(\s+.*|$)/
-			query = message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
-			"#{query}¯\\_(ツ)_/¯"
-		when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
-			query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
-			"#{query} #{tableflip_str}"
-		when /Now you.+thinking with portals!/, /^\/portals(@drrn_bot)?/
-			'Шас жахнет!'
-		when /^\/uptime(@drrn_bot)?/
-			"Я не сплю с #{$start_time} (Целых #{Time.now - $start_time} секунд!) Я крут!"
-		when /^\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
-			wh40kquote
-		when /^\/heresy(@drrn_bot)?$/
-			kb = [
-				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Да', callback_data: "#{message.chat.id}~ересь"),
-				Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Нет', callback_data: "#{message.chat.id}~не ересь")
-			]
-			markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-			bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
-			nil
-		when /^\/update_and_restart(@drrn_bot)?(\s+.*|$)/
-			return 'Пошел нахуй.' unless $admin_ids.include?(message.from.id)
-			delta = Time.now - $start_time
-			if delta < 60 # если перегружались меньше минуты назад
-				return "Сейчас мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
-			end
-			query = message.text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
-			if query.size > 0
-				bot.api.send_message(chat_id: message.chat.id, text: "Пробуем чекаутить #{query}")
-				res = %x{git checkout #{query}}
-				bot.api.send_message(chat_id: message.chat.id, text: res)
-			end
-			bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
-			sleep 5
-			abort # просто пристрелить себя, демон сам все сделает
-		when /^\/roll(@drrn_bot)?\s*$/
-			'Че кидать-то будем?'
-		when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=]\d+)?/
-			query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
-			roll(query)
+	puts "#{message.from.first_name}: #{message.text}"
+	case message.text
+	when /^\/start(@drrn_bot)?$/
+		"Ну привет, #{message.from.first_name}"
+	when /^\/stop(@drrn_bot)?$/
+		"Покеда, #{message.from.first_name}"
+	when /^\/help(@drrn_bot)?$/
+		help_msg
+	when /^\/qr_it(@drrn_bot)?\s+.+/
+		qr_it(message, bot)
+	when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
+		return 'Сам себе вжухай!' if rand > 0.9
+		query = message.text.sub(/\/(vzhuh|magic)(@drrn_bot)?\s*/, '')
+		res = vzhuh_str(query)
+		bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
+		nil
+	when /^\/shrug(@drrn_bot)?(\s+.*|$)/
+		query = message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
+		"#{query}¯\\_(ツ)_/¯"
+	when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
+		query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
+		"#{query} #{tableflip_str}"
+	when /Now you.+thinking with portals!/, /^\/portals(@drrn_bot)?/
+		'Шас жахнет!'
+	when /^\/uptime(@drrn_bot)?/
+		"Я не сплю с #{start_time} (Целых #{Time.now - start_time} секунд!) Я крут!"
+	when /^\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
+		wh40kquote
+	when /^\/heresy(@drrn_bot)?$/
+		kb = [
+			Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Да', callback_data: "#{message.chat.id}~ересь"),
+			Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Нет', callback_data: "#{message.chat.id}~не ересь")
+		]
+		markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+		bot.api.send_message(chat_id: message.chat.id, text: 'Вы подозреваете ересь?', reply_markup: markup)
+		nil
+	when /^\/update_and_restart(@drrn_bot)?(\s+.*|$)/
+		return 'Пошел нахуй.' unless admin_ids.include?(message.from.id)
+		delta = Time.now - start_time
+		if delta < 60 # если перегружались меньше минуты назад
+			return "Сейчас мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
 		end
-	rescue => e then
-		e.to_s
+		query = message.text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
+		if query.size > 0
+			bot.api.send_message(chat_id: message.chat.id, text: "Пробуем чекаутить #{query}")
+			res = %x{git checkout #{query}}
+			bot.api.send_message(chat_id: message.chat.id, text: res)
+		end
+		bot.api.send_message(chat_id: message.chat.id, text: 'Ок, перегружаюсь.')
+		sleep 5
+		abort # просто пристрелить себя, демон сам все сделает
+	when /^\/roll(@drrn_bot)?\s*$/
+		'Че кидать-то будем?'
+	when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=]\d+)?/
+		query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
+		roll(query)
 	end
+rescue => e then
+	e.to_s
 end
 
 def handle_inline(message, bot)
@@ -153,7 +154,7 @@ def handle_inline(message, bot)
 		[(i += 1), 'Перевернуть стол!', "#{query} #{tableflip_str}"],
 		[(i += 1), 'За Императора!', wh40kquote]
 	]
-	if query.size > 0
+	if query.empty?
 		results << [(i += 1), '...чертов гук!', goddamn_guk(query)]
 		results << [(i += 1), 'Больше Х богу Х!', "Больше #{query} богу #{query}!"]
 	end
@@ -183,13 +184,13 @@ end
 
 def handle_callback(message, bot)
 	p data = message.data
-	case data.split(?~).last
+	case data.split('~').last
 	when 'ересь' then 'Возможно, ересь.'
 	when 'не ересь' then 'Хреновый из вас инквизитор.'
 	end
 end
 
-Telegram::Bot::Client.run($token) do |bot|
+Telegram::Bot::Client.run(token) do |bot|
 	bot.listen do |message|
 		case message
 		when Telegram::Bot::Types::InlineQuery
