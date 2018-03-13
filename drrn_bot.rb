@@ -76,13 +76,13 @@ def wh40kquote
 	@quotes.sample
 end
 
-def vzhuh_str(mes, inline = false)
-%Q{#{'```' unless inline} ∧＿∧
+def vzhuh_str(mes)
+%Q{``` ∧＿∧
 ( ･ω･｡)つ━☆・*。
 ⊂　 ノ 　　　・゜+.
 しーＪ　　　°。+ *´¨)
 　　　　　　　　　.· ´¸.·*´¨) ¸.·*¨)
-　　　　　　　　　　(¸.·´ (¸.·'* ☆ #{mes}#{'```' unless inline}}
+　　　　　　　　　　(¸.·´ (¸.·'* ☆ #{mes}```}
 end
 
 def handle_message(message, bot)
