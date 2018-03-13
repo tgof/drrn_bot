@@ -28,7 +28,7 @@ end
 def roll(text)
 	res = text.scan(/\d+/).map(&:to_i)
 	p res
-	if condition = text.scan(/[\>\<\=]\s*\d+/).first
+	if condition = text.scan(/[\>\<\=CcСс]\s*\d+/).first
 		target = res[-1]
 		res = res[0..-2]
 	end
@@ -43,8 +43,9 @@ def roll(text)
 			r + x
 		end
 		check_result = if condition
-			method = condition.scan(/[\>\<\=]/).first
+			method = condition.scan(/[\>\<\=CcСс]/).first
 			method = '==' if method == '='
+			method = '>=' if method =~ /[CcСс]/
 			rolls.select { |x| x.send(method.to_sym, target) }.size
 		end
 		text = "Бросок #{res[0]}d#{res[1]}: #{sum} (#{rolls.join(', ')})."
@@ -138,7 +139,7 @@ def handle_message(message, bot)
 		abort # просто пристрелить себя, демон сам все сделает
 	when /^\/roll(@drrn_bot)?\s*$/
 		'Че кидать-то будем?'
-	when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=]\d+)?/
+	when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
 		query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
 		roll(query)
 	end
