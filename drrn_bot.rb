@@ -151,20 +151,20 @@ def handle_inline(message, bot)
 	p query = message.query
 	i = 1
 	results = [
-		[(i += 1), 'Пожать плечами', "#{query} ¯\\_(ツ)_/¯"],
-		[(i += 1), 'Перевернуть стол!', "#{query} #{tableflip_str}"],
-		[(i += 1), 'За Императора!', wh40kquote],
-		[(i += 1), 'Вжухни!', vzhuh_str(query, true)]
+		[(i += 1), 'Пожать плечами', {message_text: "#{query} ¯\\_(ツ)_/¯"}],
+		[(i += 1), 'Перевернуть стол!', {message_text: "#{query} #{tableflip_str}"}],
+		[(i += 1), 'За Императора!', {message_text: wh40kquote}],
+		[(i += 1), 'Вжухни!', {message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
 	]
 	unless query.empty?
-		results << [(i += 1), '...чертов гук!', goddamn_guk(query)]
-		results << [(i += 1), 'Больше Х богу Х!', "Больше #{query} богу #{query}!"]
+		results << [(i += 1), '...чертов гук!', {message_text: goddamn_guk(query)}]
+		results << [(i += 1), 'Больше Х богу Х!', {message_text: "Больше #{query} богу #{query}!"}]
 	end
 	results.map do |arr|
 		Telegram::Bot::Types::InlineQueryResultArticle.new(
 			id: arr[0],
 			title: arr[1],
-			input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: arr[2])
+			input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(arr[2])
 		)
 	end
 end
