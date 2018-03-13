@@ -154,7 +154,7 @@ def handle_inline(message, bot)
 		[(i += 1), 'Пожать плечами', "#{query} ¯\\_(ツ)_/¯"],
 		[(i += 1), 'Перевернуть стол!', "#{query} #{tableflip_str}"],
 		[(i += 1), 'За Императора!', wh40kquote],
-		[(i += 1), 'Вжухни!', vzhuh_str(query)]
+		[(i += 1), 'Вжухни!', vzhuh_str(query, true)]
 	]
 	unless query.empty?
 		results << [(i += 1), '...чертов гук!', goddamn_guk(query)]
