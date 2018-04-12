@@ -142,6 +142,9 @@ def handle_message(message, bot)
 	when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
 		query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
 		roll(query)
+	when /^\/lenny_?face(@drrn_bot)?(\s+.*|$)/
+		query = message.text.sub(/\/lenny_?face(@drrn_bot)?\s*/, '')
+		"#{query} ( ͡° ͜ʖ ͡°)"
 	end
 rescue => e then
 	e.to_s
