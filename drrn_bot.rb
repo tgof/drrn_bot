@@ -7,7 +7,7 @@ def start_time
 end
 puts start_time
 
-token = File.read('data/token.txt', encoding: 'UTF-8')
+token = File.read('data/token.txt', encoding: 'UTF-8').lines.first
 def admin_ids
 	@admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
 end
