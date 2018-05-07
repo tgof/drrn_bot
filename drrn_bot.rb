@@ -61,7 +61,7 @@ def tableflip_str
 end
 
 def qr_it(message, bot)
-	query = message.text.delete(/\/qr_it(@drrn_bot)?\s+/)
+	query = message.text.sub(/\/qr_it(@drrn_bot)?\s+/,'')
 	url = qr_url(query)
 	bot.api.send_photo(chat_id: message.chat.id, photo: url, reply_to_message_id: message.message_id)
 	nil
@@ -98,15 +98,15 @@ def handle_message(message, bot)
 		qr_it(message, bot)
 	when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
 		return 'Сам себе вжухай!' if rand > 0.9
-		query = message.text.delete(/\/(vzhuh|magic)(@drrn_bot)?\s*/)
+		query = message.text.sub(/\/(vzhuh|magic)(@drrn_bot)?\s*/, '')
 		res = vzhuh_str(query)
 		bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
 		nil
 	when /^\/shrug(@drrn_bot)?(\s+.*|$)/
-		query = message.text.delete(/\/shrug(@drrn_bot)?\s*/)
+		query = message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
 		"#{query}¯\\_(ツ)_/¯"
 	when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
-		query = message.text.delete(/\/(cppref|tableflip)(@drrn_bot)?\s*/)
+		query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
 		"#{query} #{tableflip_str}"
 	when /Now you.+thinking with portals!/, /^\/portals(@drrn_bot)?/
 		'Шас жахнет!'
@@ -128,7 +128,7 @@ def handle_message(message, bot)
 		if delta < 60 # если перегружались меньше минуты назад
 			return "Сейчас мы тут: #{%x{git show --oneline -s}}\nДо следующего возможного перезапуска #{(60 - delta).to_i} секунд."
 		end
-		query = message.text.delete(/\/update_and_restart(@drrn_bot)?\s*/)
+		query = message.text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
 		if query.size > 0
 			bot.api.send_message(chat_id: message.chat.id, text: "Пробуем чекаутить #{query}")
 			res = %x{git checkout #{query}}
@@ -140,19 +140,10 @@ def handle_message(message, bot)
 	when /^\/roll(@drrn_bot)?\s*$/
 		'Че кидать-то будем?'
 	when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
-		query = message.text.delete(/\/roll(@drrn_bot)?\s*/)
+		query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
 		roll(query)
-	when /^\/taft(_?test)?(@drrn_bot)?(\s+\d+\s+\d+)?/
-		query = message.text.delete(/\/taft(_?test)?(@drrn_bot)?\s*/)
-		params = query.scan(/\d+/)
-		width, height = params
-		width  ||= rand(1500) + 100
-		height ||= rand(1500) + 100
-		url = "https://tafttest.com/#{width}x#{height}.png"
-		bot.api.send_photo(chat_id: message.chat.id, photo: url, reply_to_message_id: message.message_id)
-		nil
 	when /^\/lenny_?face(@drrn_bot)?(\s+.*|$)/
-		query = message.text.delete(/\/lenny_?face(@drrn_bot)?\s*/)
+		query = message.text.sub(/\/lenny_?face(@drrn_bot)?\s*/, '')
 		"#{query} ( ͡° ͜ʖ ͡°)"
 	end
 rescue => e then
