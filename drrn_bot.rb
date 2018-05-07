@@ -61,7 +61,7 @@ def tableflip_str
 end
 
 def qr_it(message, bot)
-	query = message.text.sub(/\/qr_it(@drrn_bot)?\s+/,'')
+	query = message.text.sub(/\/qr_it(@drrn_bot)?\s+/, '')
 	url = qr_url(query)
 	bot.api.send_photo(chat_id: message.chat.id, photo: url, reply_to_message_id: message.message_id)
 	nil
@@ -142,6 +142,15 @@ def handle_message(message, bot)
 	when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
 		query = message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
 		roll(query)
+	when /^\/taft(_?test)?(@drrn_bot)?(\s+\d+\s+\d+)?/
+		query = message.text.sub(/\/taft(_?test)?(@drrn_bot)?\s*/, '')
+		params = query.scan(/\d+/)
+		width, height = params
+		width  ||= rand(1500) + 100
+		height ||= rand(1500) + 100
+		url = "https://tafttest.com/#{width}x#{height}.png"
+		bot.api.send_photo(chat_id: message.chat.id, photo: url, reply_to_message_id: message.message_id)
+		nil
 	when /^\/lenny_?face(@drrn_bot)?(\s+.*|$)/
 		query = message.text.sub(/\/lenny_?face(@drrn_bot)?\s*/, '')
 		"#{query} ( ͡° ͜ʖ ͡°)"
