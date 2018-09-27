@@ -86,7 +86,7 @@ def vzhuh_str(mes)
 end
 
 def fur_sausage
-%q{```                                _,-/"---,
+%q[```                                _,-/"---,
          ;"""""""""";         _/;; ""  <@`---v
        ; :::::  ::  "\      _/ ;;  "    _.../
       ;"     ;;  ;;;  \___/::    ;;,'""""
@@ -95,9 +95,9 @@ def fur_sausage
     /;;V_;;   ;;;       \       /
     | :/ / ,/            \_ "")/
     | | / /"""=            \;;\""=
-    ; ;(::""""""=            \"""=
+    ; ;{::""""""=            \"""=
  ;"""";
- \/"""```}
+ \/"""```]
 
 def send_markdown_message(reply, message, bot)
 	bot.api.send_message(chat_id: message.chat.id, text: reply, reply_to_message_id: message.message_id, parse_mode: 'Markdown')
