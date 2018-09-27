@@ -98,6 +98,7 @@ def fur_sausage
     ; ;{::""""""=            \"""=
  ;"""";
  \/"""```]
+end
 
 def send_markdown_message(reply, message, bot)
 	bot.api.send_message(chat_id: message.chat.id, text: reply, reply_to_message_id: message.message_id, parse_mode: 'Markdown')
