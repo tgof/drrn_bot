@@ -106,7 +106,7 @@ def send_markdown_message(text)
 end
 
 def handle_message
-	puts "#{message.from.first_name}: #{@message.text}"
+	puts "#{@message.from.first_name}: #{@message.text}"
 	case @message.text
 	when /^\/start(@drrn_bot)?$/
 		"Ну привет, #{@message.from.first_name}"
