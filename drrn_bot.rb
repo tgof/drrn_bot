@@ -60,10 +60,10 @@ def tableflip_str
 	@tableflip_str ||= '(╯°□°）╯︵ ┻━┻'
 end
 
-def qr_it(message, bot)
-	query = message.text.sub(/\/qr_it(@drrn_bot)?\s+/, '')
+def qr_it
+	query = @message.text.sub(/\/qr_it(@drrn_bot)?\s+/, '')
 	url = qr_url(query)
-	bot.api.send_photo(chat_id: message.chat.id, photo: url, reply_to_message_id: message.message_id)
+	@bot.api.send_photo(chat_id: @message.chat.id, photo: url, reply_to_message_id: @message.message_id)
 	nil
 end
 
