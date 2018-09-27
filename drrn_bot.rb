@@ -85,6 +85,25 @@ def vzhuh_str(mes)
 　　　　　　　　　　(¸.·´ (¸.·'* ☆ #{mes}```}
 end
 
+def fur_sausage
+%q{```                                _,-/"---,
+         ;"""""""""";         _/;; ""  <@`---v
+       ; :::::  ::  "\      _/ ;;  "    _.../
+      ;"     ;;  ;;;  \___/::    ;;,'""""
+     ;"          ;;;;.  ;;  ;;;  ::/
+    ,/ / ;;  ;;;______;;;  ;;; ::,/
+    /;;V_;;   ;;;       \       /
+    | :/ / ,/            \_ "")/
+    | | / /"""=            \;;\""=
+    ; ;(::""""""=            \"""=
+ ;"""";
+ \/"""```}
+
+def send_markdown_message(reply, message, bot)
+	bot.api.send_message(chat_id: message.chat.id, text: reply, reply_to_message_id: message.message_id, parse_mode: 'Markdown')
+	nil
+end
+
 def handle_message(message, bot)
 	puts "#{message.from.first_name}: #{message.text}"
 	case message.text
@@ -100,12 +119,11 @@ def handle_message(message, bot)
 		return 'Сам себе вжухай!' if rand > 0.9
 		query = message.text.sub(/\/(vzhuh|magic)(@drrn_bot)?\s*/, '')
 		res = vzhuh_str(query)
-		bot.api.send_message(chat_id: message.chat.id, text: res, reply_to_message_id: message.message_id, parse_mode: 'Markdown') if res.is_a? String
-		nil
+		send_markdown_message(res, message, bot) if res.is_a? String
 	when /^\/shrug(@drrn_bot)?(\s+.*|$)/
 		query = message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
 		"#{query}¯\\_(ツ)_/¯"
-	when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /[Бб]лэт/, /[Жж]еваный крот/
+	when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i
 		query = message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
 		"#{query} #{tableflip_str}"
 	when /Now you.+thinking with portals!/, /^\/portals(@drrn_bot)?/
@@ -154,6 +172,8 @@ def handle_message(message, bot)
 	when /^\/lenny_?face(@drrn_bot)?(\s+.*|$)/
 		query = message.text.sub(/\/lenny_?face(@drrn_bot)?\s*/, '')
 		"#{query} ( ͡° ͜ʖ ͡°)"
+	when /шерстяная колбаса/i
+		send_markdown_message(fur_sausage, message, bot)
 	end
 rescue => e then
 	e.to_s
