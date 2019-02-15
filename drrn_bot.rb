@@ -122,7 +122,7 @@ def handle_message
   when /^\/help(@drrn_bot)?$/
     help_msg
   when /^\/qr_it(@drrn_bot)?\s+.+/
-    qr_it(@message, @bot)
+    qr_it
   when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
     return 'Сам себе вжухай!' if rand > 0.9
 
