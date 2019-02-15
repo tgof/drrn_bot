@@ -61,6 +61,10 @@ end
 
 def qr_it
   query = @message.text.sub(/\/qr_it(@drrn_bot)?\s+/, '')
+  if query.empty? && @message.reply_to_message
+    query = @message.reply_to_message.text
+  end
+  return if query.empty?
   url = qr_url(query)
   @bot.api.send_photo(
     chat_id: @message.chat.id,
