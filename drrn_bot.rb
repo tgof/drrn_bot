@@ -116,6 +116,10 @@ def send_markdown_message(text)
   nil
 end
 
+def this_fucking_cat
+	"https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
+end
+
 def handle_message
   puts "#{@message.from.first_name}: #{@message.text}"
   case @message.text
@@ -208,7 +212,7 @@ def handle_message
   when /^\/this_fucking_cat/, /всратый кот/i
   	@bot.api.send_photo(
       chat_id: @message.chat.id,
-      photo: "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}",
+      photo: this_fucking_cat,
       reply_to_message_id: @message.message_id
     )
   end
@@ -220,23 +224,28 @@ def handle_inline
   p query = @message.query
   i = 1
   results = [
-    [(i += 1), 'Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
-    [(i += 1), 'Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
-    [(i += 1), 'За Императора!', { message_text: wh40kquote }],
-    [(i += 1), 'Вжухни!', { message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
+    ['Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
+    ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
+    ['За Императора!', { message_text: wh40kquote }],
+    ['Вжухни!', { message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
   ]
   unless query.empty?
-    results << [(i += 1), '...чертов гук!', { message_text: goddamn_guk(query) }]
-    results << [(i += 1), 'Больше Х богу Х!', { message_text: "Больше #{query} богу #{query}!" }]
+    results << ['...чертов гук!', { message_text: goddamn_guk(query) }]
+    results << ['Больше Х богу Х!', { message_text: "Больше #{query} богу #{query}!" }]
   end
-  results.map do |arr|
-    content = Telegram::Bot::Types::InputTextMessageContent.new(arr[2])
+  results.map! do |title, msg_content|
+    content = Telegram::Bot::Types::InputTextMessageContent.new(msg_content)
     Telegram::Bot::Types::InlineQueryResultArticle.new(
-      id: arr[0],
-      title: arr[1],
+      id: (i += 1),
+      title: title,
       input_message_content: content
     )
   end
+  cat_url = this_fucking_cat
+  results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+  	id: (i += 1), photo_url: cat_url, thumb_url: cat_url, title: 'Всратый кот.',
+  )
+  results
 end
 
 def goddamn_guk(str)
