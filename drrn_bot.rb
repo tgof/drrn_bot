@@ -116,6 +116,10 @@ def send_markdown_message(text)
   nil
 end
 
+def this_fucking_cat
+	"https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
+end
+
 def handle_message
   puts "#{@message.from.first_name}: #{@message.text}"
   case @message.text
@@ -208,7 +212,7 @@ def handle_message
   when /^\/this_fucking_cat/, /всратый кот/i
   	@bot.api.send_photo(
       chat_id: @message.chat.id,
-      photo: "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}",
+      photo: this_fucking_cat,
       reply_to_message_id: @message.message_id
     )
   end
@@ -229,7 +233,7 @@ def handle_inline
     results << [(i += 1), '...чертов гук!', { message_text: goddamn_guk(query) }]
     results << [(i += 1), 'Больше Х богу Х!', { message_text: "Больше #{query} богу #{query}!" }]
   end
-  results.map do |arr|
+  results.map! do |arr|
     content = Telegram::Bot::Types::InputTextMessageContent.new(arr[2])
     Telegram::Bot::Types::InlineQueryResultArticle.new(
       id: arr[0],
@@ -237,6 +241,10 @@ def handle_inline
       input_message_content: content
     )
   end
+  results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+  	id: (i += 1), photo_url: this_fucking_cat, title: 'Всратый кот.'
+  )
+  results
 end
 
 def goddamn_guk(str)
