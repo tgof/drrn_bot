@@ -208,7 +208,7 @@ def handle_message
   when /^\/this_fucking_cat/, /всратый кот/i
   	@bot.api.send_photo(
       chat_id: @message.chat.id,
-      photo: 'https://thiscatdoesnotexist.com/',
+      photo: "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}",
       reply_to_message_id: @message.message_id
     )
   end
