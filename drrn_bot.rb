@@ -241,11 +241,9 @@ def handle_inline
       input_message_content: content
     )
   end
+  cat_url = this_fucking_cat
   results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-  	id: (i += 1), photo_url: this_fucking_cat, title: 'Всратый кот.',
-  	input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(
-  		message_text: ''
-  	)
+  	id: (i += 1), photo_url: cat_url, thumb_url: cat_url, title: 'Всратый кот.',
   )
   results
 end
