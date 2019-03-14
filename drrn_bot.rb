@@ -120,6 +120,11 @@ def this_fucking_cat
 	"https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
 end
 
+def infinite_scream
+  # tribute to https://twitter.com/infinite_scream
+  "A" * ( rand(10) + 4) + "H" * ( rand(5) + 2)
+end
+
 def handle_message
   puts "#{@message.from.first_name}: #{@message.text}"
   case @message.text
@@ -215,6 +220,8 @@ def handle_message
       photo: this_fucking_cat,
       reply_to_message_id: @message.message_id
     )
+  when /[aа]{3,}/i, /^\/infinite_scream/
+    infinite_scream
   end
 rescue => e then
   e.to_s
