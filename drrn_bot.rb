@@ -122,7 +122,7 @@ end
 
 def infinite_scream
   # tribute to https://twitter.com/infinite_scream
-  "A" * ( rand(6) + rand(6) + 4) + "H" * ( rand(5) + 1)
+  'A' * (rand(1..10) + rand(6)) + 'H' * rand(1..6)
 end
 
 def handle_message
@@ -137,7 +137,7 @@ def handle_message
   when /^\/qr_it(@drrn_bot)?\s+.+/
     qr_it
   when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
-    return 'Сам себе вжухай!' if rand > 0.9
+    return 'Сам себе вжухай!' if rand(9) == 0
 
     query = @message.text.sub(/\/(vzhuh|magic)(@drrn_bot)?\s*/, '')
     res = vzhuh_str query
