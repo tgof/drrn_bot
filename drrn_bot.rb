@@ -59,6 +59,10 @@ def tableflip_str
   @tableflip_str ||= '(╯°□°）╯︵ ┻━┻'
 end
 
+def doubleflip_str
+  @doubleflip_str ||= '┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻'
+end
+
 def qr_it
   query = @message.text.sub(/\/qr_it(@drrn_bot)?\s+/, '')
   if query.empty? && @message.reply_to_message
@@ -148,6 +152,9 @@ def handle_message
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
+  when /^\/doubleflip(@drrn_bot)?(\s+.*|$)/
+    query = @message.text.sub(/\/doubleflip(@drrn_bot)?\s*/, '')
+    "#{query} #{doubleflip_str}"
   when /Now you.+thinking with portals!/, /^\/portals(@drrn_bot)?/
     'Шас жахнет!'
   when /^\/uptime(@drrn_bot)?/
