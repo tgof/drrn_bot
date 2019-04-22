@@ -149,7 +149,7 @@ def handle_message
   when /^\/shrug(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
     "#{query}¯\\_(ツ)_/¯"
-  when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i
+  when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
   when /^\/doubleflip(@drrn_bot)?(\s+.*|$)/
