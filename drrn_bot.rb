@@ -60,7 +60,7 @@ def tableflip_str
 end
 
 def tableflip_regexp
-  @tableflip_regexp ||= Regexp.new(tableflip_str)
+  @tableflip_regexp ||= /\(╯°□°\）╯︵ ┻━┻/
 end
 
 def doubleflip_str
