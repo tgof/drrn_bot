@@ -59,10 +59,6 @@ def tableflip_str
   @tableflip_str ||= '(╯°□°）╯︵ ┻━┻'
 end
 
-def tableflip_regexp
-  @tableflip_regexp ||= Regexp.new(tableflip_str)
-end
-
 def doubleflip_str
   @doubleflip_str ||= '┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻'
 end
@@ -157,9 +153,9 @@ def handle_message
   when /^\/shrug(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
     "#{query}¯\\_(ツ)_/¯"
-  when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_regexp, /подними стол/i
+  when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_str
     query = @message.text.sub(/\/unflip(@drrn_bot)?\s*/, '')
-    query.gsub!(tableflip_regexp,'')
+    query.gsub!(tableflip_str,'')
     "#{query} #{unflip_str}"
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
