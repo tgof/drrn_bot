@@ -136,6 +136,27 @@ end
 def handle_message
   puts "#{@message.from.first_name}: #{@message.text}"
   case @message.text
+  when /^\/update_and_restart(@drrn_bot)?(\s+.*|$)/
+    return 'Пошел нахуй.' unless admin_ids.include?(@message.from.id)
+
+    delta = Time.now - start_time
+    if delta < 60 # если перегружались меньше минуты назад
+      return "Сейчас мы тут: #{%x{git show --oneline -s}}\n\
+До следующего возможного перезапуска #{(60 - delta).to_i} секунд."
+    end
+
+    query = @message.text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
+    unless query.empty?
+      @bot.api.send_message(
+        chat_id: @message.chat.id,
+        text: "Пробуем чекаутить #{query}"
+      )
+      res = `git checkout #{query}`
+      @bot.api.send_message(chat_id: @message.chat.id, text: res)
+    end
+    @bot.api.send_message(chat_id: @message.chat.id, text: 'Ок, перегружаюсь.')
+    sleep 5
+    abort # просто пристрелить себя, демон сам все сделает
   when /^\/start(@drrn_bot)?$/
     "Ну привет, #{@message.from.first_name}"
   when /^\/stop(@drrn_bot)?$/
@@ -185,27 +206,6 @@ def handle_message
       reply_markup: markup
     )
     nil
-  when /^\/update_and_restart(@drrn_bot)?(\s+.*|$)/
-    return 'Пошел нахуй.' unless admin_ids.include?(@message.from.id)
-
-    delta = Time.now - start_time
-    if delta < 60 # если перегружались меньше минуты назад
-      return "Сейчас мы тут: #{%x{git show --oneline -s}}\n\
-До следующего возможного перезапуска #{(60 - delta).to_i} секунд."
-    end
-
-    query = @message.text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
-    unless query.empty?
-      @bot.api.send_message(
-        chat_id: @message.chat.id,
-        text: "Пробуем чекаутить #{query}"
-      )
-      res = `git checkout #{query}`
-      @bot.api.send_message(chat_id: @message.chat.id, text: res)
-    end
-    @bot.api.send_message(chat_id: @message.chat.id, text: 'Ок, перегружаюсь.')
-    sleep 5
-    abort # просто пристрелить себя, демон сам все сделает
   when /^\/roll(@drrn_bot)?\s*$/
     'Че кидать-то будем?'
   when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
