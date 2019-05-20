@@ -179,9 +179,7 @@ def handle_message
     query = @message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
     "#{query}¯\\_(ツ)_/¯"
   when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_regexp, /(подними|поставь) (стол|обратно)/i
-    query = @message.text.sub(/\/unflip(@drrn_bot)?\s*/, '')
-    query.gsub!(tableflip_regexp,'')
-    "#{query} #{unflip_str}"
+    unflip_str
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
