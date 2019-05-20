@@ -178,7 +178,7 @@ def handle_message
   when /^\/shrug(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
     "#{query}¯\\_(ツ)_/¯"
-  when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_regexp, /подними стол/i
+  when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_regexp, /(подними|поставь) (стол|обратно)/i
     query = @message.text.sub(/\/unflip(@drrn_bot)?\s*/, '')
     query.gsub!(tableflip_regexp,'')
     "#{query} #{unflip_str}"
