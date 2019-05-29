@@ -212,7 +212,17 @@ def handle_message
     'Че кидать-то будем?'
   when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
     query = @message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
-    roll(query)
+    result = roll(query)
+    begin
+      @bot.api.send_message(
+        chat_id: @message.chat.id,
+        text: result,
+        reply_to_message_id: @message.message_id
+      )
+      nil
+    rescue => e
+      'Куда тебе столько, ебанутый?'
+    end
   when /^\/taft(_?test)?(@drrn_bot)?(\s+\d+\s+\d+)?/
     query = @message.text.sub(/\/taft(_?test)?(@drrn_bot)?\s*/, '')
     params = query.scan(/\d+/)
@@ -231,12 +241,12 @@ def handle_message
     "#{query} ( ͡° ͜ʖ ͡°)"
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
-  when /^\/this_fucking_cat/, /всратый кот/i
-  	@bot.api.send_photo(
-      chat_id: @message.chat.id,
-      photo: this_fucking_cat,
-      reply_to_message_id: @message.message_id
-    )
+  # when /^\/this_fucking_cat/, /всратый кот/i
+  # 	@bot.api.send_photo(
+  #     chat_id: @message.chat.id,
+  #     photo: this_fucking_cat,
+  #     reply_to_message_id: @message.message_id
+  #   )
   when /[aа]{4,}/i, /^\/infinite_scream/
     infinite_scream
   end
