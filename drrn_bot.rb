@@ -241,12 +241,12 @@ def handle_message
     "#{query} ( ͡° ͜ʖ ͡°)"
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
-  # when /^\/this_fucking_cat/, /всратый кот/i
-  # 	@bot.api.send_photo(
-  #     chat_id: @message.chat.id,
-  #     photo: this_fucking_cat,
-  #     reply_to_message_id: @message.message_id
-  #   )
+  when /^\/this_fucking_cat/, /всратый кот/i
+    @bot.api.send_photo(
+       chat_id: @message.chat.id,
+       photo: this_fucking_cat,
+       reply_to_message_id: @message.message_id
+    )
   when /[aа]{4,}/i, /^\/infinite_scream/
     infinite_scream
   end
