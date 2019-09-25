@@ -241,7 +241,7 @@ def handle_message
     "#{query} ( ͡° ͜ʖ ͡°)"
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
-  when /^\/this_fucking_cat/, /всратый кот/i, /всратая ша(у|ве)рма/i, /шерстяной пид(а|о)рас/i
+  when /^\/this_fucking_cat/, /всрат(ый ко(т[яра]|шак)|ая котяра)/i, /всратая ша(у|ве)рма/i, /шерстяной пид(а|о)рас/i
     @bot.api.send_photo(
        chat_id: @message.chat.id,
        photo: this_fucking_cat,
