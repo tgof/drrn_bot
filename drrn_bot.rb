@@ -147,6 +147,19 @@ def this_fucking_fox
   JSON.parse(res.body)["output_url"]
 end
 
+def this_fucking_cock
+  uri = URI("http://api.deepai.org/api/text2img")
+  req = Net::HTTP::Post.new(uri)
+  req["api-key"] = @foxtoken
+  req.set_form_data("text" => "HSE")
+  puts req.body
+  res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+    http.request(req)
+  }
+  puts res.body
+  JSON.parse(res.body)["output_url"]
+end
+
 def infinite_scream
   # tribute to https://twitter.com/infinite_scream
   'A' * (rand(1..10) + rand(6)) + 'H' * rand(1..6)
@@ -262,16 +275,22 @@ def handle_message
     "#{query} ( ͡° ͜ʖ ͡°)"
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
-  when /^\/this_fucking_cat/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i, /ъуъ/i, /уъу/i
+  when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i, /ъуъ/i, /уъу/i
     @bot.api.send_photo(
        chat_id: @message.chat.id,
        photo: this_fucking_cat,
        reply_to_message_id: @message.message_id
     )
-  when /^\/this_fucking_fox/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
+  when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     @bot.api.send_photo(
        chat_id: @message.chat.id,
        photo: this_fucking_fox,
+       reply_to_message_id: @message.message_id
+    )
+  when /^\/this_fucking_cock(@drrn_bot)?/, /(съедобная|всратая|вкусная) кур(иц)?а/i, /(съедобный|всратый|вкусный) п(е|и)ту(х|ш(ок|ара))/i, /(съедобный|всратый|вкусный) пид(а|о)р(ас)?/i, /(к+(о|а)+-?){4,}/i
+    @bot.api.send_photo(
+       chat_id: @message.chat.id,
+       photo: this_fucking_cock,
        reply_to_message_id: @message.message_id
     )
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
@@ -312,6 +331,10 @@ def handle_inline
   fox_url = this_fucking_fox
   results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
     id: (i += 1), photo_url: fox_url, thumb_url: fox_url, title: 'Всратый лис.',
+  )
+  cock_url = this_fucking_cock
+  results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+    id: (i += 1), photo_url: cock_url, thumb_url: cock_url, title: 'Всратый петух.',
   )
   results
 end
