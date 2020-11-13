@@ -312,7 +312,7 @@ def handle_inline
     this_fucking_cock => 'Всратый петух.',
   }.each do |url, title|
     results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-      id: (i += 1), photo_url: url, thumb_url: cat_url, title: title,
+      id: (i += 1), photo_url: url, thumb_url: url, title: title,
     )
   end
   results
