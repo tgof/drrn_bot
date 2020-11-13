@@ -2,6 +2,7 @@
 
 require 'telegram/bot'
 require 'net/http'
+require 'json'
 
 def start_time
   @start_time ||= Time.now
@@ -9,6 +10,7 @@ end
 puts start_time
 
 token = File.read('data/token.txt', encoding: 'UTF-8').lines.first.delete("\n")
+foxtoken = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n")
 def admin_ids
   @admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
 end
@@ -129,7 +131,20 @@ def send_markdown_message(text)
 end
 
 def this_fucking_cat
-	"https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
+  "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
+end
+
+def this_fucking_fox
+  uri = URI("http://api.deepai.org/api/text2img")
+  req = Net::HTTP::Post.new(uri)
+  req["api-key"] = foxtoken
+  req.set_form_data("text" => "Me today for M06-2X")
+  print req.body
+  res = Net::HTTP.start(uri.hostname, uri.port) {|http|
+    http.request(req)
+  }
+  print res.body
+  JSON.parse(res.body)["output_url"]
 end
 
 def infinite_scream
@@ -247,6 +262,12 @@ def handle_message
        photo: this_fucking_cat,
        reply_to_message_id: @message.message_id
     )
+  when /^\/this_fucking_fox/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)/i
+    @bot.api.send_photo(
+       chat_id: @message.chat.id,
+       photo: this_fucking_fox,
+       reply_to_message_id: @message.message_id
+    )
   when /[aа]{4,}/i, /^\/infinite_scream/
     infinite_scream
   end
@@ -277,7 +298,11 @@ def handle_inline
   end
   cat_url = this_fucking_cat
   results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-  	id: (i += 1), photo_url: cat_url, thumb_url: cat_url, title: 'Всратый кот.',
+    id: (i += 1), photo_url: cat_url, thumb_url: cat_url, title: 'Всратый кот.',
+  )
+  fox_url = this_fucking_fox
+  results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+    id: (i += 1), photo_url: fox_url, thumb_url: fox_url, title: 'Всратый лис.',
   )
   results
 end
