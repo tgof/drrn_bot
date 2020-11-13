@@ -168,7 +168,7 @@ end
 def handle_message
   puts "#{@message.from.first_name}: #{@message.text}"
   case @message.text
-  when /^\/update_and_restart(@drrn_bot)?(\s+.*|$)/
+  when /^\/update(@drrn_bot)?(\s+.*|$)/
     return 'Пошел нахуй.' unless admin_ids.include?(@message.from.id)
 
     delta = Time.now - start_time
@@ -177,7 +177,7 @@ def handle_message
 До следующего возможного перезапуска #{(60 - delta).to_i} секунд."
     end
 
-    query = @message.text.sub(/\/update_and_restart(@drrn_bot)?\s*/, '')
+    query = @message.text.sub(/\/update(@drrn_bot)?\s*/, '')
     unless query.empty?
       @bot.api.send_message(
         chat_id: @message.chat.id,
