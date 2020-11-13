@@ -144,11 +144,11 @@ def deepai_text2img(text)
 end
 
 def this_fucking_fox
-  deepai_text2img "Me today for M06-2X")
+  deepai_text2img "Me today for M06-2X"
 end
 
 def this_fucking_cock
-  deepai_text2img "HSE")
+  deepai_text2img "HSE"
 end
 
 def infinite_scream
