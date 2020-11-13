@@ -259,7 +259,7 @@ def handle_message
        photo: this_fucking_cat,
        reply_to_message_id: @message.message_id
     )
-  when /^\/this_fucking_fox/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)/i
+  when /^\/this_fucking_fox/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     @bot.api.send_photo(
        chat_id: @message.chat.id,
        photo: this_fucking_fox,
