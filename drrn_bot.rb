@@ -306,15 +306,17 @@ def handle_inline
       input_message_content: content
     )
   end
-  # {
-  #   this_fucking_cat => 'Всратый кот.',
-  #   this_fucking_fox => 'Всратый лис.',
-  #   this_fucking_cock => 'Всратый петух.',
-  # }.each do |url, title|
-  #   results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-  #     id: (i += 1), photo_url: url, thumb_url: url, title: title,
-  #   )
-  # end
+  if query[/всратый/i]
+    {
+      this_fucking_cat => 'Всратый кот.',
+      this_fucking_fox => 'Всратый лис.',
+      this_fucking_cock => 'Всратый петух.',
+    }.each do |url, title|
+      results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+        id: (i += 1), photo_url: url, thumb_url: url, title: title,
+      )
+    end
+  end
   results
 end
 
