@@ -214,11 +214,20 @@ def handle_message
       )
     ]
     markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-    @bot.api.send_message(
-      chat_id: @message.chat.id,
-      text: 'Вы подозреваете ересь?',
-      reply_markup: markup
-    )
+    if @message.reply_to_message != nil
+      @bot.api.send_message(
+        chat_id: @message.chat.id,
+        text: 'Вы подозреваете ересь?',
+        reply_to_message_id: @message.reply_to_message.message_id,
+        reply_markup: markup
+      )
+    else
+      @bot.api.send_message(
+        chat_id: @message.chat.id,
+        text: 'Вы подозреваете ересь?',
+        reply_markup: markup
+      )
+    end
     nil
   when /^\/roll(@drrn_bot)?\s*$/
     'Че кидать-то будем?'
@@ -326,7 +335,7 @@ def handle_callback
   p data = @message.data
   case data.split('~').last
   when 'ересь' then 'Возможно, ересь.'
-  when 'не ересь' then 'Хреновый из вас инквизитор.'
+  when 'не ересь' then "Хреновый из Вас инквизитор, #{@message.from.first_name}."
   end
 end
 
