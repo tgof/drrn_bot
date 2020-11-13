@@ -195,9 +195,6 @@ def handle_message
     "#{query}¯\\_(ツ)_/¯"
   when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_regexp, /(подними|поставь) (стол|обратно)/i
     unflip_str
-  when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
-    query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
-    "#{query} #{tableflip_str}"
   when /^\/doubleflip(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/doubleflip(@drrn_bot)?\s*/, '')
     "#{query} #{doubleflip_str}"
@@ -268,6 +265,9 @@ def handle_message
        photo: this_fucking_fox,
        reply_to_message_id: @message.message_id
     )
+  when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
+    query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
+    "#{query} #{tableflip_str}"
   when /[aа]{4,}/i, /^\/infinite_scream/
     infinite_scream
   end
