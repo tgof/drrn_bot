@@ -10,7 +10,7 @@ end
 puts start_time
 
 token = File.read('data/token.txt', encoding: 'UTF-8').lines.first.delete("\n")
-@foxtoken = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n")
+@deepai_token = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n")
 def admin_ids
   @admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
 end
@@ -80,11 +80,7 @@ def qr_it
   end
   return if query.empty?
   url = qr_url(query)
-  @bot.api.send_photo(
-    chat_id: @message.chat.id,
-    photo: url,
-    reply_to_message_id: @message.message_id
-  )
+  reply_with_image url
   nil
 end
 
@@ -134,11 +130,11 @@ def this_fucking_cat
   "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
 end
 
-def this_fucking_fox
+def deepai_text2img(text)
   uri = URI("http://api.deepai.org/api/text2img")
   req = Net::HTTP::Post.new(uri)
-  req["api-key"] = @foxtoken
-  req.set_form_data("text" => "Me today for M06-2X")
+  req["api-key"] = @deepai_token
+  req.set_form_data("text" => text)
   puts req.body
   res = Net::HTTP.start(uri.hostname, uri.port) {|http|
     http.request(req)
@@ -147,22 +143,26 @@ def this_fucking_fox
   JSON.parse(res.body)["output_url"]
 end
 
+def this_fucking_fox
+  deepai_text2img "Me today for M06-2X")
+end
+
 def this_fucking_cock
-  uri = URI("http://api.deepai.org/api/text2img")
-  req = Net::HTTP::Post.new(uri)
-  req["api-key"] = @foxtoken
-  req.set_form_data("text" => "HSE")
-  puts req.body
-  res = Net::HTTP.start(uri.hostname, uri.port) {|http|
-    http.request(req)
-  }
-  puts res.body
-  JSON.parse(res.body)["output_url"]
+  deepai_text2img "HSE")
 end
 
 def infinite_scream
   # tribute to https://twitter.com/infinite_scream
   'A' * (rand(1..10) + rand(6)) + 'H' * rand(1..6)
+end
+
+def reply_with_image(image_url)
+  @bot.api.send_photo(
+     chat_id: @message.chat.id,
+     photo: image_url,
+     reply_to_message_id: @message.message_id
+  )
+  nil
 end
 
 def handle_message
@@ -199,7 +199,6 @@ def handle_message
     qr_it
   when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
     return 'Сам себе вжухай!' if rand(9) == 0
-
     query = @message.text.sub(/\/(vzhuh|magic)(@drrn_bot)?\s*/, '')
     res = vzhuh_str query
     send_markdown_message(res) if res.is_a? String
@@ -264,11 +263,7 @@ def handle_message
     width  ||= rand(100..1600)
     height ||= rand(100..1600)
     url = "https://tafttest.com/#{width}x#{height}.png"
-    @bot.api.send_photo(
-      chat_id: @message.chat.id,
-      photo: url,
-      reply_to_message_id: @message.message_id
-    )
+    reply_with_image url
     nil
   when /^\/lenny_?face(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/lenny_?face(@drrn_bot)?\s*/, '')
@@ -276,23 +271,11 @@ def handle_message
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
   when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i, /ъуъ/i, /уъу/i
-    @bot.api.send_photo(
-       chat_id: @message.chat.id,
-       photo: this_fucking_cat,
-       reply_to_message_id: @message.message_id
-    )
+    reply_with_image this_fucking_cat
   when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
-    @bot.api.send_photo(
-       chat_id: @message.chat.id,
-       photo: this_fucking_fox,
-       reply_to_message_id: @message.message_id
-    )
+    reply_with_image this_fucking_fox
   when /^\/this_fucking_cock(@drrn_bot)?/, /(съедобная|всратая|вкусная) кур(иц)?а/i, /(съедобный|всратый|вкусный) п(е|и)ту(х|ш(ок|ара))/i, /(съедобный|всратый|вкусный) пид(а|о)р(ас)?/i, /(к+(о|а)+-?){4,}/i
-    @bot.api.send_photo(
-       chat_id: @message.chat.id,
-       photo: this_fucking_cock,
-       reply_to_message_id: @message.message_id
-    )
+    reply_with_image this_fucking_cock
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
@@ -324,18 +307,15 @@ def handle_inline
       input_message_content: content
     )
   end
-  cat_url = this_fucking_cat
-  results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-    id: (i += 1), photo_url: cat_url, thumb_url: cat_url, title: 'Всратый кот.',
-  )
-  fox_url = this_fucking_fox
-  results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-    id: (i += 1), photo_url: fox_url, thumb_url: fox_url, title: 'Всратый лис.',
-  )
-  cock_url = this_fucking_cock
-  results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-    id: (i += 1), photo_url: cock_url, thumb_url: cock_url, title: 'Всратый петух.',
-  )
+  {
+    this_fucking_cat => 'Всратый кот.',
+    this_fucking_fox => 'Всратый лис.',
+    this_fucking_cock => 'Всратый петух.',
+  }.each do |url, title|
+    results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+      id: (i += 1), photo_url: url, thumb_url: cat_url, title: title,
+    )
+  end
   results
 end
 
