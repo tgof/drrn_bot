@@ -162,7 +162,6 @@ def reply_with_image(image_url)
      photo: image_url,
      reply_to_message_id: @message.message_id
   )
-  nil
 end
 
 def handle_message
