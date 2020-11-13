@@ -10,7 +10,7 @@ end
 puts start_time
 
 token = File.read('data/token.txt', encoding: 'UTF-8').lines.first.delete("\n")
-foxtoken = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n")
+@foxtoken = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n")
 def admin_ids
   @admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
 end
@@ -137,13 +137,13 @@ end
 def this_fucking_fox
   uri = URI("http://api.deepai.org/api/text2img")
   req = Net::HTTP::Post.new(uri)
-  req["api-key"] = foxtoken
+  req["api-key"] = @foxtoken
   req.set_form_data("text" => "Me today for M06-2X")
-  print req.body
+  puts req.body
   res = Net::HTTP.start(uri.hostname, uri.port) {|http|
     http.request(req)
   }
-  print res.body
+  puts res.body
   JSON.parse(res.body)["output_url"]
 end
 
