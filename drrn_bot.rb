@@ -94,6 +94,12 @@ def wh40kquote
   @quotes.sample
 end
 
+def shouldi_answer
+  @answers ||= File.read('data/answers.txt', encoding: 'UTF-8')
+                  .split("\n")
+  @answers.sample
+end
+
 #################################### <- mobile telegram line meter :)
 def vzhuh_str(mes)
   "```
@@ -135,7 +141,6 @@ def deepai_text2img(text)
   req = Net::HTTP::Post.new(uri)
   req["api-key"] = @deepai_token
   req.set_form_data("text" => text)
-  puts req.body
   res = Net::HTTP.start(uri.hostname, uri.port) {|http|
     http.request(req)
   }
@@ -255,6 +260,28 @@ def handle_message
     rescue => e
       'Куда тебе столько, ебанутый?'
     end
+  when /^\/should_?i(@drrn_bot)?\s*$/
+    'Тупить? Тупить не нужно.'
+  when /^\/should_?i(@drrn_bot)?(\s+.*|$)/
+    kb = [
+      Telegram::Bot::Types::InlineKeyboardButton.new(
+        text: 'Да', callback_data: "#{@message.chat.id}~answer-да"
+      ),
+      Telegram::Bot::Types::InlineKeyboardButton.new(
+        text: 'Нет', callback_data: "#{@message.chat.id}~answer-нет"
+      )
+    ]
+    markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
+    res = shouldi_answer
+    res += "\n_Этот ответ был полезен?_"
+    @bot.api.send_message(
+      chat_id: @message.chat.id,
+      text: res,
+      parse_mode: 'Markdown',
+      reply_markup: markup,
+      reply_to_message_id: @message.message_id
+    )
+    nil
   when /^\/taft(_?test)?(@drrn_bot)?(\s+\d+\s+\d+)?/
     query = @message.text.sub(/\/taft(_?test)?(@drrn_bot)?\s*/, '')
     params = query.scan(/\d+/)
@@ -335,11 +362,19 @@ def goddamn_guk(str)
   str + @guk_str
 end
 
-def handle_callback
+def handle_callback_heresy
   p data = @message.data
   case data.split('~').last
   when 'ересь' then 'Возможно, ересь.'
   when 'не ересь' then "Хреновый из Вас инквизитор, #{@message.from.first_name}."
+  end
+end
+
+def handle_callback_answer
+  p data = @message.data
+  case data.split('~').last
+  when 'answer-да' then 'Ну вот и славно!'
+  when 'answer-нет' then 'На нет и суда нет!'
   end
 end
 
@@ -370,14 +405,26 @@ Telegram::Bot::Client.run(token) do |bot|
       end
     when Telegram::Bot::Types::CallbackQuery
       # Here you can handle your callbacks from inline buttons
-      res = handle_callback
-      begin
-        @bot.api.edit_message_text(
-          chat_id: @message.data.split(?~).first,
-          message_id: @message.message.message_id,
-          text: res
-        ) if res.is_a? String
-      rescue => e then puts(e)
+      if @message.data.split(?~).last.include? "ересь"
+        res = handle_callback_heresy
+        begin
+          @bot.api.edit_message_text(
+            chat_id: @message.data.split(?~).first,
+            message_id: @message.message.message_id,
+            text: res
+          ) if res.is_a? String
+        rescue => e then puts(e)
+        end
+      elsif @message.data.split(?~).last.include? "answer"
+        res = handle_callback_answer
+        begin
+          @bot.api.answer_callback_query(
+            callback_query_id: @message.id,
+            text: res,
+            show_alert: true
+          ) if res.is_a? String
+        rescue => e then puts(e)
+        end
       end
     end
   end
