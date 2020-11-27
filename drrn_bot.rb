@@ -23,6 +23,7 @@ def help_msg
   * /tableflip - Переверни стол!
   * /vzhuh - Вжух!
   * /shrug - пожми плечами
+  * /version - показывать свою версию
   * Нихуя
 А еще я сплю большую часть времени.'
 end
@@ -199,6 +200,8 @@ def handle_message
     "Покеда, #{@message.from.first_name}"
   when /^\/help(@drrn_bot)?$/
     help_msg
+  when /^\/version(@drrn_bot)?(\s+.*|$)/
+    "Сейчас мы тут:\n#{%x{git show -s --format='%h %s'}}"
   when /^\/qr_it(@drrn_bot)?\s+.+/
     qr_it
   when /^\/(vzhuh|magic)(@drrn_bot)?(\s+.*|$)/
