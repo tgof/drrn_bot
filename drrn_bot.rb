@@ -209,7 +209,7 @@ def handle_message
   when /^\/shrug(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/shrug(@drrn_bot)?\s*/, '')
     "#{query}¯\\_(ツ)_/¯"
-  when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_regexp, /(подними|поставь) (стол|обратно)/i
+  when /^\/unflip(@drrn_bot)?(\s+.*|$)/, tableflip_regexp, /(подними|поставь) (стол|обратно|на место|назад)/i, /верни стол (обратно|на место)/i
     unflip_str
   when /^\/doubleflip(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/doubleflip(@drrn_bot)?\s*/, '')
