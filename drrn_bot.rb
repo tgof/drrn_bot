@@ -101,6 +101,88 @@ def shouldi_answer
   @answers.sample
 end
 
+def number2str(number, sex)
+  return "вечность" if(number >= 1000)
+  res = ""
+  hundreds = [ "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот" ]
+  unders  = [ "", "", "", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
+              "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" ]
+  case sex
+  when "M"
+    unders[0..2] = [ "", "один", "два" ]
+  when "F"
+    unders[0..2] = [ "", "одну", "две" ]
+  end
+  dozens  = [ "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "сетьдесят", "восемьдесят", "девяносто" ]
+  res += hundreds[number/100] + " "
+  number = number % 100
+  case number
+  when 0..19
+    res += unders[number]
+  else
+    res += dozens[number / 10] + " " + unders[number % 10]
+  end
+  res.strip
+end
+
+def timesuffixes(ivalue, strs)
+  case ivalue%100
+  when 11..14
+    return "#{strs[2]}"
+  end
+  case ivalue%10
+  when 0
+    return "#{strs[2]}"
+  when 1
+    return "#{strs[0]}"
+  when 2..4
+    return "#{strs[1]}"
+  else
+    return "#{strs[2]}"
+  end
+end
+
+def time2str(period, names)
+  return "" if period == 0
+  if names[0][-1].eql? "y" then
+    sex = "F"
+  else
+    sex = "M"
+  end
+  "#{number2str(period, sex)} #{timesuffixes(period, names)}"
+end
+
+def humantime(dTime)
+  prefix = "Я не спал уже"
+  iStM = 60
+  iMtH = 60
+  iHtD = 24
+  iStH = iStM * iMtH
+  iStD = iStH * iHtD
+  iMtD = iMtH * iHtD
+  idTime = dTime.to_i
+  days         = idTime / iStD
+  return "#{prefix} целую вечность!" if days > 999
+  hours        = idTime / iStH - (days * iHtD)
+  minutes      = idTime / iStM - (days * iMtD + hours * iMtH)
+  seconds      = idTime        - (days * iStD + hours * iStH + minutes * iStM)
+  floatseconds = dTime - idTime
+  nanoseconds  = "#{floatseconds.round(9)}"[2..-1].to_i
+  milliseconds = nanoseconds / 1000 / 1000
+  miсroseconds = nanoseconds / 1000 % 1000
+  nanoseconds  = nanoseconds        % 1000
+  prefix = "Я не сплю уже" if days * iHtD + hours < 8
+  prefix += " целых" if hours < 1
+  days         = time2str(days,         ["день",         "дня",          "дней"       ])
+  hours        = time2str(hours,        ["час",          "часа",         "часов"      ])
+  minutes      = time2str(minutes,      ["минутy",       "минуты",       "минут"      ])
+  seconds      = time2str(seconds,      ["секундy",      "секунды",      "секунд"     ])
+  milliseconds = time2str(milliseconds, ["миллисекундy", "миллисекунды", "миллисекунд"])
+  miсroseconds = time2str(miсroseconds, ["микросекундy", "микросекунды", "микросекунд"])
+  nanoseconds  = time2str(nanoseconds,  ["наносекундy",  "наносекунды",  "наносекунд" ])
+  "#{prefix} #{days} #{hours} #{minutes} #{seconds} #{milliseconds} #{miсroseconds} #{nanoseconds}".squeeze " "
+end
+
 #################################### <- mobile telegram line meter :)
 def vzhuh_str(mes)
   "```
@@ -220,7 +302,8 @@ def handle_message
   when /Now you.+thinking with portals!/, /^\/portals(@drrn_bot)?/
     'Шас жахнет!'
   when /^\/uptime(@drrn_bot)?/
-    "Я не сплю с #{start_time} (Целых #{Time.now - start_time} секунд!) Я крут!"
+    dTime = Time.now - start_time
+    "#{humantime dTime} отсчитывая от #{start_time}! Я крут!"
   when /^\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
     wh40kquote
   when /^\/heresy(@drrn_bot)?$/
