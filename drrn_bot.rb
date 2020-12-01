@@ -101,58 +101,58 @@ def shouldi_answer
   @answers.sample
 end
 
-def number2str(number, sex)
-  return "вечность" if(number >= 1000)
-  res = ""
-  hundreds = [ "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот" ]
-  unders  = [ "", "", "", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
-              "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" ]
-  case sex
-  when "M"
-    unders[0..2] = [ "", "один", "два" ]
-  when "F"
-    unders[0..2] = [ "", "одну", "две" ]
-  end
-  dozens  = [ "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "сетьдесят", "восемьдесят", "девяносто" ]
-  res += hundreds[number/100] + " "
-  number = number % 100
-  case number
-  when 0..19
-    res += unders[number]
-  else
-    res += dozens[number / 10] + " " + unders[number % 10]
-  end
-  res.strip
-end
 
-def timesuffixes(ivalue, strs)
-  case ivalue%100
-  when 11..14
-    return "#{strs[2]}"
-  end
-  case ivalue%10
-  when 0
-    return "#{strs[2]}"
-  when 1
-    return "#{strs[0]}"
-  when 2..4
-    return "#{strs[1]}"
-  else
-    return "#{strs[2]}"
-  end
-end
 
-def time2str(period, names)
-  return "" if period == 0
-  if names[0][-1].eql? "y" then
-    sex = "F"
-  else
-    sex = "M"
-  end
-  "#{number2str(period, sex)} #{timesuffixes(period, names)}"
-end
 
 def humantime(dTime)
+  def time2str(period, names)
+    return "" if period == 0
+    def timesuffixes(ivalue, strs)
+      case ivalue%100
+      when 11..14
+        return "#{strs[2]}"
+      end
+      case ivalue%10
+      when 0
+        return "#{strs[2]}"
+      when 1
+        return "#{strs[0]}"
+      when 2..4
+        return "#{strs[1]}"
+      else
+        return "#{strs[2]}"
+      end
+    end
+    def number2str(number, sex)
+      return "вечность" if(number >= 1000)
+      res = ""
+      hundreds = [ "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот" ]
+      unders  = [ "", "", "", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
+                  "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" ]
+      case sex
+      when "M"
+        unders[0..2] = [ "", "один", "два" ]
+      when "F"
+        unders[0..2] = [ "", "одну", "две" ]
+      end
+      dozens  = [ "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "сетьдесят", "восемьдесят", "девяносто" ]
+      res += hundreds[number/100] + " "
+      number = number % 100
+      case number
+      when 0..19
+        res += unders[number]
+      else
+        res += dozens[number / 10] + " " + unders[number % 10]
+      end
+      res.strip
+    end
+    if names[0][-1].eql? "y" then
+      sex = "F"
+    else
+      sex = "M"
+    end
+    "#{number2str(period, sex)} #{timesuffixes(period, names)}"
+  end
   prefix = "Я не спал уже"
   iStM = 60
   iMtH = 60
