@@ -163,7 +163,23 @@ def humantime(dTime)
   miсroseconds = nanoseconds / 1000 % 1000
   nanoseconds  = nanoseconds        % 1000
   prefix = "Я не сплю уже" if days * iHtD + hours < 8
-  prefix += " целых" if hours < 1
+  if hours < 1 then
+    tmp = minutes
+    tmp = seconds      if tmp.zero?
+    tmp = milliseconds if tmp.zero?
+    tmp = microseconds if tmp.zero?
+    tmp = nanoseconds  if tmp.zero?
+    if tmp % 100 == 11 then
+      prefix += " целых"
+    else
+      case tmp % 10
+      when 1
+        prefix += " целую"
+      else
+        prefix += " целых"
+      end
+    end
+  end
   days         = time2str(days,         ["день",         "дня",          "дней"       ])
   hours        = time2str(hours,        ["час",          "часа",         "часов"      ])
   minutes      = time2str(minutes,      ["минутy",       "минуты",       "минут"      ])
@@ -171,7 +187,7 @@ def humantime(dTime)
   milliseconds = time2str(milliseconds, ["миллисекундy", "миллисекунды", "миллисекунд"])
   miсroseconds = time2str(miсroseconds, ["микросекундy", "микросекунды", "микросекунд"])
   nanoseconds  = time2str(nanoseconds,  ["наносекундy",  "наносекунды",  "наносекунд" ])
-  "#{prefix} #{days} #{hours} #{minutes} #{seconds} #{milliseconds} #{miсroseconds} #{nanoseconds}".squeeze " "
+  "#{prefix} #{days} #{hours} #{minutes} #{seconds} #{milliseconds} #{miсroseconds} #{nanoseconds}".squeeze(" ").sub "целую одну", "целую"
 end
 
 def humandate(time)
