@@ -101,14 +101,11 @@ def shouldi_answer
   @answers.sample
 end
 
-
-
-
 def humantime(dTime)
   def time2str(period, names)
-    return "" if period == 0
+    return "" if period.zero?
     def timesuffixes(ivalue, strs)
-      case ivalue%100
+      case ivalue % 100
       when 11..14
         return "#{strs[2]}"
       end
@@ -124,7 +121,7 @@ def humantime(dTime)
       end
     end
     def number2str(number, sex)
-      return "вечность" if(number >= 1000)
+      return "бесконечное число" if(number > 999)
       res = ""
       hundreds = [ "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот" ]
       unders  = [ "", "", "", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
@@ -136,7 +133,7 @@ def humantime(dTime)
         unders[0..2] = [ "", "одну", "две" ]
       end
       dozens  = [ "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "сетьдесят", "восемьдесят", "девяносто" ]
-      res += hundreds[number/100] + " "
+      res += hundreds[number / 100] + " "
       number = number % 100
       case number
       when 0..19
