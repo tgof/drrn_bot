@@ -89,16 +89,10 @@ def qr_url(query)
   "http://chart.apis.google.com/chart?chs=300x300&cht=qr&choe=UTF-8&chl=#{query}"
 end
 
-def wh40kquote
-  @quotes ||= File.read('data/warhammer_quotes.txt', encoding: 'UTF-8')
-                  .split("\n")
-  @quotes.sample
-end
-
-def shouldi_answer
-  @answers ||= File.read('data/answers.txt', encoding: 'UTF-8')
-                  .split("\n")
-  @answers.sample
+def dataline(filename)
+  lines ||= File.read("data/#{filename}.txt", encoding: 'UTF-8')
+                .split("\n")
+  lines.sample
 end
 
 def humantime(dTime)
@@ -452,7 +446,7 @@ def handle_message
     dTime = Time.now - start_time
     "#{humantime dTime} c #{humandate start_time}! Я крут!"
   when /^\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
-    wh40kquote
+    dataline "warhammer_quotes"
   when /^\/heresy(@drrn_bot)?$/
     kb = [
       Telegram::Bot::Types::InlineKeyboardButton.new(
@@ -505,7 +499,7 @@ def handle_message
       )
     ]
     markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-    res = shouldi_answer
+    res = dataline "shouldi_answers"
     res += "\n_Этот ответ был полезен?_"
     @bot.api.send_message(
       chat_id: @message.chat.id,
@@ -551,7 +545,7 @@ def handle_inline
   results = [
     ['Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
     ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
-    ['За Императора!', { message_text: wh40kquote }],
+    ['За Императора!', { message_text: dataline("warhammer_quotes") }],
     ['Вжухни!', { message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
   ]
   unless query.empty?
