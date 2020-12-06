@@ -382,13 +382,13 @@ def handle_message
     "#{query} ( ͡° ͜ʖ ͡°)"
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
-  when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i, /ъуъ/i, /уъу/i
+  when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i #, /ъуъ/i, /уъу/i
     reply_with_image this_fucking_cat
   when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     reply_with_image this_fucking_fox
   when /^\/this_fucking_cock(@drrn_bot)?/, /(съедобная|всратая|вкусная) кур(иц)?а/i, /(съедобный|всратый|вкусный) п(е|и)ту(х|ш(ок|ара))/i, /(съедобный|всратый|вкусный) пид(а|о)р(ас)?/i, /(к+(о|а)+-?){4,}/i
     reply_with_image this_fucking_cock
-  when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
+  when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/ #, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
   when /[aа]{4,}/i, /^\/infinite_scream/
