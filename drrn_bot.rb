@@ -380,6 +380,13 @@ def handle_message
   when /^\/lenny_?face(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/lenny_?face(@drrn_bot)?\s*/, '')
     "#{query} ( ͡° ͜ʖ ͡°)"
+  when /с новым годом/i
+    now = Time.now
+    if (now.day == 31 && now.month == 12 && now.hour >= 21) || (now.day == 1 && now.month == 1)
+      "С новым годом, чертила!"
+    else
+      nil
+    end
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
   when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i #, /ъуъ/i, /уъу/i
