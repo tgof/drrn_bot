@@ -382,7 +382,7 @@ def handle_message
     "#{query} ( ͡° ͜ʖ ͡°)"
   when /с новым годом/i
     now = Time.now
-    if (now.day == 31 && now.month == 12 && now.hour >= 21) || (now.day == 1 && now.month == 1)
+    if (now.day == 31 && now.month == 12 && now.hour >= 15) || (now.day == 1 && now.month == 1)
       "С новым годом, чертила #{@message.from.first_name}!"
     else
       nil
