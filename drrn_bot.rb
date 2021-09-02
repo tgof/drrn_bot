@@ -89,70 +89,61 @@ def qr_url(query)
   "http://chart.apis.google.com/chart?chs=300x300&cht=qr&choe=UTF-8&chl=#{query}"
 end
 
-def wh40kquote
-  @quotes ||= File.read('data/warhammer_quotes.txt', encoding: 'UTF-8')
-                  .split("\n")
-  @quotes.sample
-end
-
-def shouldi_answer
-  @answers ||= File.read('data/answers.txt', encoding: 'UTF-8')
-                  .split("\n")
-  @answers.sample
-end
-
-def number2str(number, sex)
-  return "вечность" if(number >= 1000)
-  res = ""
-  hundreds = [ "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот" ]
-  unders  = [ "", "", "", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
-              "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" ]
-  case sex
-  when "M"
-    unders[0..2] = [ "", "один", "два" ]
-  when "F"
-    unders[0..2] = [ "", "одну", "две" ]
-  end
-  dozens  = [ "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "сетьдесят", "восемьдесят", "девяносто" ]
-  res += hundreds[number/100] + " "
-  number = number % 100
-  case number
-  when 0..19
-    res += unders[number]
-  else
-    res += dozens[number / 10] + " " + unders[number % 10]
-  end
-  res.strip
-end
-
-def timesuffixes(ivalue, strs)
-  case ivalue%100
-  when 11..14
-    return "#{strs[2]}"
-  end
-  case ivalue%10
-  when 0
-    return "#{strs[2]}"
-  when 1
-    return "#{strs[0]}"
-  when 2..4
-    return "#{strs[1]}"
-  else
-    return "#{strs[2]}"
-  end
-end
-
-def time2str(period, names)
-  return "" if period == 0
-  if names[0][-1].eql? "y" then
-    sex = "F"
-  else
-    sex = "M"
-  end
-  "#{number2str(period, sex)} #{timesuffixes(period, names)}"
+def dataline(filename)
+  lines ||= File.read("data/#{filename}.txt", encoding: 'UTF-8')
+                .split("\n")
+  lines.sample
 end
 
 def humantime(dTime)
+  def time2str(period, names)
+    return "" if period.zero?
+    def timesuffixes(ivalue, strs)
+      case ivalue % 100
+      when 11..14
+        return "#{strs[2]}"
+      end
+      case ivalue%10
+      when 0
+        return "#{strs[2]}"
+      when 1
+        return "#{strs[0]}"
+      when 2..4
+        return "#{strs[1]}"
+      else
+        return "#{strs[2]}"
+      end
+    end
+    def number2str(number, sex)
+      return "бесконечное число" if(number > 999)
+      res = ""
+      hundreds = [ "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот" ]
+      unders  = [ "", "", "", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять", "десять",
+                  "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать" ]
+      case sex
+      when "M"
+        unders[0..2] = [ "", "один", "два" ]
+      when "F"
+        unders[0..2] = [ "", "одну", "две" ]
+      end
+      dozens  = [ "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто" ]
+      res += hundreds[number / 100] + " "
+      number = number % 100
+      case number
+      when 0..19
+        res += unders[number]
+      else
+        res += dozens[number / 10] + " " + unders[number % 10]
+      end
+      res.strip
+    end
+    if names[0][-1].eql? "y" then
+      sex = "F"
+    else
+      sex = "M"
+    end
+    "#{number2str(period, sex)} #{timesuffixes(period, names)}"
+  end
   prefix = "Я не спал уже"
   iStM = 60
   iMtH = 60
@@ -172,7 +163,23 @@ def humantime(dTime)
   miсroseconds = nanoseconds / 1000 % 1000
   nanoseconds  = nanoseconds        % 1000
   prefix = "Я не сплю уже" if days * iHtD + hours < 8
-  prefix += " целых" if hours < 1
+  if hours < 1 then
+    tmp = minutes
+    tmp = seconds      if tmp.zero?
+    tmp = milliseconds if tmp.zero?
+    tmp = microseconds if tmp.zero?
+    tmp = nanoseconds  if tmp.zero?
+    if tmp % 100 == 11 then
+      prefix += " целых"
+    else
+      case tmp % 10
+      when 1
+        prefix += " целую"
+      else
+        prefix += " целых"
+      end
+    end
+  end
   days         = time2str(days,         ["день",         "дня",          "дней"       ])
   hours        = time2str(hours,        ["час",          "часа",         "часов"      ])
   minutes      = time2str(minutes,      ["минутy",       "минуты",       "минут"      ])
@@ -180,7 +187,157 @@ def humantime(dTime)
   milliseconds = time2str(milliseconds, ["миллисекундy", "миллисекунды", "миллисекунд"])
   miсroseconds = time2str(miсroseconds, ["микросекундy", "микросекунды", "микросекунд"])
   nanoseconds  = time2str(nanoseconds,  ["наносекундy",  "наносекунды",  "наносекунд" ])
-  "#{prefix} #{days} #{hours} #{minutes} #{seconds} #{milliseconds} #{miсroseconds} #{nanoseconds}".squeeze " "
+  "#{prefix} #{days} #{hours} #{minutes} #{seconds} #{milliseconds} #{miсroseconds} #{nanoseconds}".squeeze(" ").sub "целую одну", "целую"
+end
+
+def humandate(time)
+  def humanms(number, names)
+    numerals = [ "нуля", "одной", "двух", "трёх", "четырёх", "пяти", "шести", "семи", "восьми", "девяти", "десяти",
+                 "одиннадцати", "двенадцати", "тринадцати", "четырнадцати", "пятнадцати", "шестнадцати", "семнадцати", "восемнадцати", "девятнадцати" ]
+    dozens = [ "", "", "двадцати", "тридцати", "сорока", "пятидесяти", "шестидесяти" ]
+    res = ""
+    case number
+    when 0..19
+      res = numerals[number]
+    else
+      res = dozens[number / 10]
+      res += " " + numerals[number % 10] if !(number % 10).zero?
+    end
+    case number
+    when 1,21,31,41,51
+      res += " " + names[1]
+    else
+      res += " " + names[0]
+    end
+  end
+  def humanhours(number)
+    res = ""
+    numerals = [ "", "", "двух", "трёх", "четырёх", "пяти", "шести", "семи", "восьми", "девяти", "десяти", "одиннадцати" ]
+    case number
+    when 0
+      res = "нуля часов"
+    when 1
+      res = "первого часа ночи и"
+    when 2..11
+      res = numerals[number] + " часов"
+    end
+    case number
+    when 2..3
+      res += " ночи"
+    when 4..11
+      res += " утра"
+    end
+    return res if !res.eql? ""
+    number -= 12
+    case number
+    when 0
+      res = "двенадцати часов"
+    when 1
+      res = "часу"
+    when 2..11
+      res = numerals[number] + " часов"
+    end
+    case number
+    when 0..4
+      res += " дня"
+    when 5..11
+      res += " вечера"
+    end
+    res
+  end
+  def humanday(number)
+    days = [ "", "первого", "второго", "третьего", "четвертого", "пятого", "шестого", "седьмого", "восьмого", "девятого", "десятого",
+      "одиннадцатого", "двенадцатого", "тринадцатого", "четырнадцатого", "пятнадцатого", "шестнадцатого", "семнадцатого", "восемнадцатого", "девятнадцатого", "двадцатого" ]
+    dozendays = [ "", "", "двадцать", "тридцать" ]
+    thirtieth = "тридцатого"
+    case number
+    when 1..20
+      days[number]
+    when 30
+      thirtieth
+    when 21..29, 31
+      dozendays[number / 10] + " " + days[number % 10]
+    end
+  end
+  def humanmonth(number)
+    [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ][number - 1]
+  end
+  def humanyear(number)
+    #только для 2ххх годов и не 2000-ого
+    return "неизвестного года" if number <= 2000 or number > 2999
+    res = "две тысячи "
+    hundreds   = [ "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот" ]
+    hundredths = [ "", "сотого", "двухсотого", "трёхсотого", "четырёхсотого", "пятисотого", "шестисотого", "семисотого", "восьмисотого", "девятисотого" ]
+    underths   = [ "", "первого", "второго", "третьего", "четвертого", "пятого", "шестого", "седьмого", "восьмого", "девятого", "десятого",
+                   "одиннадцатого", "двенадцатого", "тринадцатого", "четырнадцатого", "пятнадцатого", "шестнадцатого", "семнадцатого", "восемнадцатого", "девятнадцатого" ]
+    dozens     = [ "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "сетьдесят", "восемьдесят", "девяносто" ]
+    dozenths   = [ "", "", "двадцатого", "тридцатого", "сорокового", "пятидесятого", "шестидесятого", "семидесятого", "восьмидесятого", "девятидесятого" ]
+    number = number % 1000
+    if number % 100 == 0 then
+      res += hundredths[number/100] + " "
+    else
+      res += hundreds[number/100] + " "
+    end
+    number = number % 100
+    case number
+    when 0
+    when 1..19
+      res += underths[number]
+    else
+      if (number % 10).zero? then
+        res += dozenths[number / 10]
+      else
+        res += dozens[number / 10] + " " + underths[number % 10]
+      end
+    end
+    res += " года"
+    res.squeeze " "
+  end
+  def humanzone(name)
+    "по " +
+    { "ACST" => "центральноавстралийскому",
+      "AEST" => "восточноавстралийскому",
+      "AKT"  => "аляскинскому",
+      "ART"  => "аргентинскому",
+      "AST"  => "атлантическому",
+      "AWST" => "западноавстралийскому",
+      "BDT"  => "бангладешскому",
+      "BTT"  => "бутанскому",
+      "CAT"  => "центральноафриканскому",
+      "CET"  => "центральноевропейскому",
+      "CST"  => "центральноамериканскому",
+      "CXT"  => "рождественскому островному",
+      "ChT"  => "чаморсскому",
+      "EAT"  => "восточноафриканскому",
+      "EET"  => "восточноевропейскому",
+      "EST"  => "североамериканскому восточному",
+      "FET"  => "восточному",
+      "GALT" => "галапагосскому",
+      "GMT"  => "среднему по Гринвичу",
+      "HAST" => "гавайско-алеутскому",
+      "HKT"  => "гонконгскому",
+      "IRST" => "иранскому",
+      "JST"  => "японскому",
+      "MT"   => "горному",
+      "MSK"  => "московскому",
+      "MST"  => "мьянмскому",
+      "NFT"  => "норфолкскому островному",
+      "NST"  => "ньюфаундлендскому",
+      "PET"  => "перуанскому",
+      "PHT"  => "филлипинскому",
+      "PKT"  => "пакистанскому",
+      "PMST" => "сен-пьер-и-микелонскому",
+      "PST"  => "тихоокеанскому",
+      "SLT"  => "шри-ланкийскому",
+      "SST"  => "сингапурскому",
+      "ST"   => "самоаскому",
+      "THA"  => "таиландскому",
+      "UTC"  => "всемирному координационному",
+      "WAT"  => "западноафриканскому",
+      "WET"  => "западноевропейскому"
+    }[name] + " времени"
+  end
+  "#{humanhours time.hour} #{humanms(time.min, [ 'минут', 'минуты' ])} #{humanms(time.sec, [ 'секунд', 'секунды' ])} #{humanday time.day} #{humanmonth time.month} #{humanyear time.year} #{humanzone time.zone}"
 end
 
 #################################### <- mobile telegram line meter :)
@@ -303,9 +460,9 @@ def handle_message
     'Шас жахнет!'
   when /^\/uptime(@drrn_bot)?/
     dTime = Time.now - start_time
-    "#{humantime dTime} отсчитывая от #{start_time}! Я крут!"
+    "#{humantime dTime} c #{humandate start_time}! Я крут!"
   when /^\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
-    wh40kquote
+    dataline "warhammer_quotes"
   when /^\/heresy(@drrn_bot)?$/
     kb = [
       Telegram::Bot::Types::InlineKeyboardButton.new(
@@ -358,7 +515,7 @@ def handle_message
       )
     ]
     markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
-    res = shouldi_answer
+    res = dataline "shouldi_answers"
     res += "\n_Этот ответ был полезен?_"
     @bot.api.send_message(
       chat_id: @message.chat.id,
@@ -411,7 +568,7 @@ def handle_inline
   results = [
     ['Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
     ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
-    ['За Императора!', { message_text: wh40kquote }],
+    ['За Императора!', { message_text: dataline("warhammer_quotes") }],
     ['Вжухни!', { message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
   ]
   unless query.empty?
