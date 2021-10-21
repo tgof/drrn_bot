@@ -568,6 +568,7 @@ def handle_inline
   results = [
     ['Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
     ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
+    ['Вернуть стол!', { message_text: "#{query} #{unflip_str}" }],
     ['За Императора!', { message_text: dataline("warhammer_quotes") }],
     ['Вжухни!', { message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
   ]
