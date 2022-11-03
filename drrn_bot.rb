@@ -486,6 +486,9 @@ def handle_message
     nil
   when /^\/roll(@drrn_bot)?\s*$/
     'Че кидать-то будем?'
+  when /^\/deepai(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
+    query = @message.text.sub(/\/deepai(@drrn_bot)?\s*/, '')
+    deepai_text2img query
   when /^\/roll(@drrn_bot)?\s+\d+d\d+(\s*[\>\<\=CcСс]\d+)?/
     query = @message.text.sub(/\/roll(@drrn_bot)?\s*/, '')
     result = roll(query)
