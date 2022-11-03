@@ -547,7 +547,7 @@ def handle_message
     send_markdown_message fur_sausage
   when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i #, /ъуъ/i, /уъу/i
     reply_with_image this_fucking_cat
-  when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
+  when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лис(а|ичка)/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     reply_with_image this_fucking_fox
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/ #, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
