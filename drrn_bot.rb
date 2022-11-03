@@ -389,11 +389,7 @@ def deepai_text2img(text)
 end
 
 def this_fucking_fox
-  deepai_text2img "Me today for M06-2X"
-end
-
-def this_fucking_cock
-  deepai_text2img "HSE"
+  deepai_text2img "fox"
 end
 
 def infinite_scream
@@ -550,8 +546,6 @@ def handle_message
     reply_with_image this_fucking_cat
   when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лиса/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     reply_with_image this_fucking_fox
-  when /^\/this_fucking_cock(@drrn_bot)?/, /(съедобная|всратая|вкусная) кур(иц)?а/i, /(съедобный|всратый|вкусный) п(е|и)ту(х|ш(ок|ара))/i, /(съедобный|всратый|вкусный) пид(а|о)р(ас)?/i, /(к+(о|а)+-?){4,}/i
-    reply_with_image this_fucking_cock
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/ #, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
@@ -588,7 +582,6 @@ def handle_inline
     {
       this_fucking_cat => 'Всратый кот.',
       this_fucking_fox => 'Всратый лис.',
-      this_fucking_cock => 'Всратый петух.',
     }.each do |url, title|
       results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
         id: (i += 1), photo_url: url, thumb_url: url, title: title,
