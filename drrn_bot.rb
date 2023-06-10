@@ -381,8 +381,7 @@ def deepai_text2img(text)
   uri = URI("http://api.deepai.org/api/text2img")
   req = Net::HTTP::Post.new(uri)
   req["api-key"] = @deepai_token
-  req.set_form_data("text" => text)
-  req.set_form_data("grid_size" => '1')
+  req.set_form_data("text" => text, "grid_size" => '1')
   res = Net::HTTP.start(uri.hostname, uri.port) {|http|
     http.request(req)
   }
