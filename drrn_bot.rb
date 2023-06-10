@@ -373,7 +373,8 @@ def send_markdown_message(text)
 end
 
 def this_fucking_cat
-  "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
+  # "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
+  deepai_text2img "cat"
 end
 
 def deepai_text2img(text)
