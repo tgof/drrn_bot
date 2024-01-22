@@ -525,15 +525,15 @@ def handle_message
       reply_to_message_id: @message.message_id
     )
     nil
-  when /^\/taft(_?test)?(@drrn_bot)?(\s+\d+\s+\d+)?/
-    query = @message.text.sub(/\/taft(_?test)?(@drrn_bot)?\s*/, '')
-    params = query.scan(/\d+/)
-    width, height = params
-    width  ||= rand(100..1600)
-    height ||= rand(100..1600)
-    url = "https://tafttest.com/#{width}x#{height}.png"
-    reply_with_image url
-    nil
+  # when /^\/taft(_?test)?(@drrn_bot)?(\s+\d+\s+\d+)?/
+  #   query = @message.text.sub(/\/taft(_?test)?(@drrn_bot)?\s*/, '')
+  #   params = query.scan(/\d+/)
+  #   width, height = params
+  #   width  ||= rand(100..1600)
+  #   height ||= rand(100..1600)
+  #   url = "https://tafttest.com/#{width}x#{height}.png"
+  #   reply_with_image url
+  #   nil
   when /^\/lenny_?face(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/lenny_?face(@drrn_bot)?\s*/, '')
     "#{query} ( ͡° ͜ʖ ͡°)"
