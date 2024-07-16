@@ -62,6 +62,10 @@ def tableflip_str
   @tableflip_str ||= '(╯°□°）╯︵ ┻━┻'
 end
 
+def tableflipsyou_str
+  @tableflipsyou_str ||= 'ノ┬─┬ノ ︵ ( \\o°o)\\'
+end
+
 def tableflip_regexp
   @tableflip_regexp ||= /\(╯°□°\）╯︵ ┻━┻/
 end
@@ -559,6 +563,9 @@ def handle_message
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/ #, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
+  when /^\/tableflipsyou(@drrn_bot)?(\s+.*|$)/
+    query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
+    "#{query} #{tableflipsyou_str}"
   when /[aа]{4,}/i, /^\/infinite_scream/
     infinite_scream
   end
@@ -573,6 +580,7 @@ def handle_inline
     ['Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
     ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
     ['Вернуть стол!', { message_text: "#{query} #{unflip_str}" }],
+    ['Стол перевернет тебя!', { message_text: "#{query} #{tableflipsyou_str}" }],
     ['За Императора!', { message_text: dataline("warhammer_quotes") }],
     ['Вжухни!', { message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
   ]
