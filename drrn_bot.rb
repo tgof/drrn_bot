@@ -4,9 +4,6 @@ require 'telegram/bot'
 require 'net/http'
 require 'json'
 
-begin
-
-
 def start_time
   @start_time ||= Time.now
 end
@@ -695,11 +692,4 @@ Telegram::Bot::Client.run(token) do |bot|
       end
     end
   end
-end
-
-
-rescue => e
-  `git checkout ORIG_HEAD`
-  sleep 5
-  abort
 end
