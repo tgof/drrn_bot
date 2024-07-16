@@ -436,6 +436,7 @@ def handle_message
       @bot.api.send_message(chat_id: @message.chat.id, text: res)
     end
     @bot.api.send_message(chat_id: @message.chat.id, text: 'Ок, перегружаюсь.')
+    `git pull`
     sleep 5
     abort # просто пристрелить себя, демон сам все сделает
   when /^\/start(@drrn_bot)?$/
