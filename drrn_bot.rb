@@ -564,7 +564,7 @@ def handle_message
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
   when /^\/tableflipsyou(@drrn_bot)?(\s+.*|$)/
-    query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
+    query = @message.text.sub(/\/tableflipsyou(@drrn_bot)?\s*/, '')
     "#{query} #{tableflipsyou_str}"
   when /[aа]{4,}/i, /^\/infinite_scream/
     infinite_scream
