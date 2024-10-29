@@ -23,6 +23,10 @@ if File.exist? SCREAMING_FILE
   end
 end
 
+def save_screaming_chats
+  File.write(SCREAMING_FILE, @screaming_chats.map(&:to_s).join("\n"))
+end
+
 def help_msg
   'Я умею:
   * /roll 3d6 - брось дайсы!
@@ -580,13 +584,13 @@ def handle_message
       "Уже ору! #{infinite_scream}"
     else
       @screaming_chats << @message.chat.id
-      File.write(SCREAMING_FILE, @screaming_chats.map(&:to_s).join("\n"))
+      save_screaming_chats
       "Теперь ору! #{infinite_scream}"
     end
   when /^\/disable_scream/
     if @screaming_chats.include? @message.chat.id
       @screaming_chats.delete @message.chat.id
-      File.write(SCREAMING_FILE, @screaming_chats.map(&:to_s).join("\n"))
+      save_screaming_chats
       "Заткнулся :<"
     else
       "Не ору!"
