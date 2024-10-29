@@ -441,7 +441,7 @@ def handle_message
         text: "Пробуем чекаутить #{query}"
       )
       res = `git checkout #{query}`
-      @bot.api.send_message(chat_id: @message.chat.id, text: res)
+      @bot.api.send_message(chat_id: @message.chat.id, text: 'OK')
     end
     @bot.api.send_message(chat_id: @message.chat.id, text: 'Ок, перегружаюсь.')
     `git pull`
