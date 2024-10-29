@@ -567,7 +567,7 @@ def handle_message
   when /^\/tableflipsyou(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/tableflipsyou(@drrn_bot)?\s*/, '')
     "#{query} #{tableflipsyou_str}"
-  when /[aа]{4,}/i, /^\/infinite_scream/
+  when /^\/infinite_scream/ #, /[aа]{4,}/i
     infinite_scream
   end
 rescue => e then
