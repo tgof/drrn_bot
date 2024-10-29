@@ -15,6 +15,14 @@ def admin_ids
   @admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
 end
 
+SCREAMING_FILE = 'data/screaming_ids.txt'
+@screaming_chats = Set.new
+if File.exist? SCREAMING_FILE
+  File.read(SCREAMING_FILE, encoding: 'UTF-8').lines.compact.uniq.each do |n|
+    @screaming_chats << n.to_i
+  end
+end
+
 def help_msg
   'Я умею:
   * /roll 3d6 - брось дайсы!
@@ -567,8 +575,26 @@ def handle_message
   when /^\/tableflipsyou(@drrn_bot)?(\s+.*|$)/
     query = @message.text.sub(/\/tableflipsyou(@drrn_bot)?\s*/, '')
     "#{query} #{tableflipsyou_str}"
-  when /^\/infinite_scream/ #, /[aа]{4,}/i
+  when /^\/enable_scream/
+    if @screaming_chats.include? @message.chat.id
+      "Уже ору! #{infinite_scream}"
+    else
+      @screaming_chats << @message.chat.id
+      File.write(SCREAMING_FILE, @screaming_chats.map(&:to_s).join("\n"))
+      "Теперь ору! #{infinite_scream}"
+    end
+  when /^\/disable_scream/
+    if @screaming_chats.include? @message.chat.id
+      @screaming_chats.delete @message.chat.id
+      File.write(SCREAMING_FILE, @screaming_chats.map(&:to_s).join("\n"))
+      "Заткнулся :<"
+    else
+      "Не ору!"
+    end
+  when /^\/infinite_scream/
     infinite_scream
+  when /[aа]{4,}/i
+    infinite_scream if @screaming_chats.include? @message.chat.id
   end
 rescue => e then
   e.to_s
