@@ -722,4 +722,6 @@ Telegram::Bot::Client.run(token) do |bot|
       end
     end
   end
+rescue => e
+  puts(e) 
 end
