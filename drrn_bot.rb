@@ -423,6 +423,7 @@ end
 def reply_with_image(image_url)
   unless image_url
     @bot.api.send_message(chat_id: @message.chat.id, text: 'А вот и нифига!')
+    return
   end
   @bot.api.send_photo(
      chat_id: @message.chat.id,
