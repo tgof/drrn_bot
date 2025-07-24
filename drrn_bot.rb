@@ -394,6 +394,8 @@ def this_fucking_cat
 end
 
 def deepai_text2img(text)
+  return null if @deepai_token.nil? || @deepai_token.empty?
+
   uri = URI("http://api.deepai.org/api/text2img")
   req = Net::HTTP::Post.new(uri)
   req["api-key"] = @deepai_token
@@ -419,6 +421,9 @@ def infinite_scream
 end
 
 def reply_with_image(image_url)
+  unless image_url
+    @bot.api.send_message(chat_id: @message.chat.id, text: 'А вот и нифига!')
+  end
   @bot.api.send_photo(
      chat_id: @message.chat.id,
      photo: image_url,
@@ -620,24 +625,23 @@ def handle_inline
     results << ['Больше Х богу Х!', { message_text: "Больше #{query} богу #{query}!" }]
   end
   results.map! do |title, msg_content|
-    content = Telegram::Bot::Types::InputTextMessageContent.new(msg_content)
     Telegram::Bot::Types::InlineQueryResultArticle.new(
       id: (i += 1),
       title: title,
-      input_message_content: content
+      input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(msg_content)
     )
   end
-  if query[/всратый/i]
-    {
-      this_fucking_cat => 'Всратый кот.',
-      this_fucking_fox => 'Всратый лис.',
-      this_fucking_dog => 'Всратый пес.',
-    }.each do |url, title|
-      results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-        id: (i += 1), photo_url: url, thumb_url: url, title: title,
-      )
-    end
-  end
+  # if query[/всратый/i]
+  #   {
+  #     this_fucking_cat => 'Всратый кот.',
+  #     this_fucking_fox => 'Всратый лис.',
+  #     this_fucking_dog => 'Всратый пес.',
+  #   }.each do |url, title|
+  #     results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+  #       id: (i += 1), photo_url: url, thumb_url: url, title: title,
+  #     )
+  #   end
+  # end
   results
 end
 
