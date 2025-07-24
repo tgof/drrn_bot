@@ -482,14 +482,14 @@ def handle_message
   when /^\/for_the_emperor(@drrn_bot)?$/, 'За Императора!'
     dataline "warhammer_quotes"
   when /^\/heresy(@drrn_bot)?$/
-    kb = [
+    kb = [[
       Telegram::Bot::Types::InlineKeyboardButton.new(
         text: 'Да', callback_data: "#{@message.chat.id}~ересь"
       ),
       Telegram::Bot::Types::InlineKeyboardButton.new(
         text: 'Нет', callback_data: "#{@message.chat.id}~не ересь"
       )
-    ]
+    ]]
     markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
     if @message.reply_to_message != nil
       @bot.api.send_message(
@@ -613,7 +613,7 @@ def handle_inline
     ['Вернуть стол!', { message_text: "#{query} #{unflip_str}" }],
     ['Стол перевернет тебя!', { message_text: "#{query} #{tableflipsyou_str}" }],
     ['За Императора!', { message_text: dataline("warhammer_quotes") }],
-    ['Вжухни!', { message_text: vzhuh_str(query), parse_mode: 'Markdown' }]
+    ['Вжухни!', { message_text: vzhuh_str(query)}]
   ]
   unless query.empty?
     results << ['...чертов гук!', { message_text: goddamn_guk(query) }]
@@ -723,5 +723,5 @@ Telegram::Bot::Client.run(token) do |bot|
     end
   end
 rescue => e
-  puts(e) 
+  puts(e)
 end
