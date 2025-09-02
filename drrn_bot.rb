@@ -726,11 +726,11 @@ def handle_inline
   i = 0
   results = [
     ['Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
-    ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
-    ['Вернуть стол!', { message_text: "#{query} #{unflip_str}" }],
-    ['Стол перевернет тебя!', { message_text: "#{query} #{tableflipsyou_str}" }],
-    ['За Императора!', { message_text: dataline("warhammer_quotes") }],
-    ['Вжухни!', { message_text: vzhuh_str(query)}]
+    # ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
+    # ['Вернуть стол!', { message_text: "#{query} #{unflip_str}" }],
+    # ['Стол перевернет тебя!', { message_text: "#{query} #{tableflipsyou_str}" }],
+    # ['За Императора!', { message_text: dataline("warhammer_quotes") }],
+    # ['Вжухни!', { message_text: vzhuh_str(query)}]
   ]
   unless query.empty?
     results << ['...чертов гук!', { message_text: goddamn_guk(query) }]
@@ -743,20 +743,20 @@ def handle_inline
       input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(msg_content)
     )
   end
-  if query[/всратый/i]
-    {
-      this_fucking_cat => 'Всратый кот.',
-      this_fucking_fox => 'Всратый лис.',
-      this_fucking_dog => 'Всратый пес.',
-    }.each do |url, title|
-      # results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-      #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
-      # )
-      results << Telegram::Bot::Types::InputTextMessageContent.new(
-        id: (i += 1), message_text: url
-      )
-    end
-  end
+  # if query[/всратый/i]
+  #   {
+  #     this_fucking_cat => 'Всратый кот.',
+  #     this_fucking_fox => 'Всратый лис.',
+  #     this_fucking_dog => 'Всратый пес.',
+  #   }.each do |url, title|
+  #     # results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+  #     #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
+  #     # )
+  #     results << Telegram::Bot::Types::InputTextMessageContent.new(
+  #       id: (i += 1), message_text: url
+  #     )
+  #   end
+  # end
   results
 end
 
