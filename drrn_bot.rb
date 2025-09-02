@@ -754,7 +754,7 @@ def handle_inline
       # )
       results << {
         id: (i += 1).to_s,
-        title: title
+        title: title,
         Telegram::Bot::Types::InputTextMessageContent.new(url)
       }
     end
