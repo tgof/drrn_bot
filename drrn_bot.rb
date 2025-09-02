@@ -755,7 +755,7 @@ def handle_inline
       results << Telegram::Bot::Types::InlineQueryResultArticle.new(
         id: (i += 1).to_s,
         title: title,
-        Telegram::Bot::Types::InputTextMessageContent.new(url)
+        input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(url)
       )
     end
   end
