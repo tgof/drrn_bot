@@ -390,7 +390,120 @@ end
 
 def this_fucking_cat
   # "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
-  deepai_text2img "cat"
+  # deepai_text2img "cat"
+
+[%q{```
+ _._     _,-'""`-._
+(,-.`._,'(       |\`-/|
+    `-.-' \ )-`( , o o)
+          `-    \`_`"'-
+    ```},
+    %q{```
+    |\__/,|   (`\
+  _.|o o  |_   ) )
+-(((---(((--------
+    ```},
+    %q{```
+ |\__/,|   (`\
+ |_ _  |.--.) )
+ ( T   )     /
+(((^_(((/(((_/
+    ```},
+    %q{```
+  |\'/-..--.
+ / _ _   ,  ;
+`~=`Y'~_<._./
+ <`-....__.'
+    ```},
+    %q{```
+   |\---/|
+   | ,_, |
+    \_`_/-..----.
+ ___/ `   ' ,""+ \
+(__...'   __\    |`.___.';
+  (_,...'(_,.`__)/'.....+
+    ```},
+    %q{```
+                        _
+                       | \
+                       | |
+                       | |
+  |\                   | |
+ /, ~\                / /
+X     `-.....-------./ /
+ ~-. ~  ~              |
+    \             /    |
+     \  /_     ___\   /
+     | /\ ~~~~~   \ |
+     | | \        || |
+     | |\ \       || )
+    (_/ (_/      ((_/
+    ```},
+].sample
+end
+
+def this_fucking_fox
+  # deepai_text2img "fox"
+  [%q{```
+  _,-=._              /|_/|
+  `-.}   `=._,.-=-._.,  @ @._,
+     `._ _,-.   )      _,.-'
+        `    G.m-"^m`m'
+    ```},
+    %q{```
+   /\   /\
+  //\\_//\\     ____
+  \_     _/    /   /
+   / * * \    /^^^]
+   \_\O/_/    [   ]
+    /   \_    [   /
+    \     \_  /  /
+     [ [ /  \/ _/
+    _[ [ \  /_/
+    ```},
+    %q{```
+              /^._
+,___,--~~~~--' /'~
+`~--~\ )___,)/'
+    (/\\_  (/\\_
+    ```},
+    %q{```
+
+                                                                   ,-,
+                                                             _.-=;~ /_
+                                                          _-~   '     ;.
+                                                      _.-~     '   .-~-~`-._
+                                                _.--~~:.             --.____88
+                              ____.........--~~~. .' .  .        _..-------~~
+                     _..--~~~~               .' .'             ,'
+                 _.-~                        .       .     ` ,'
+               .'                                    :.    ./
+             .:     ,/          `                   ::.   ,'
+           .:'     ,(            ;.                ::. ,-'
+          .'     ./'.`.     . . /:::._______.... _/:.o/
+         /     ./'. . .)  . _.,'               `88;?88|
+       ,'  . .,/'._,-~ /_.o8P'                  88P ?8b
+    _,'' . .,/',-~    d888P'                    88'  88|
+ _.'~  . .,:oP'        ?88b              _..--- 88.--'8b.--..__
+:     ...' 88o __,------.88o ...__..._.=~- .    `~~   `~~      ~-._
+`.;;;:='    ~~            ~~~                ~-    -       -   -
+    ```},
+].sample
+end
+
+def this_fucking_dog
+  # deepai_text2img "dog"
+    [%q{```
+                        __
+ ,                    ," e`--o
+((                   (  | __,'
+ \\~----------------' \_;/
+ (                      /
+ /) ._______________.  )
+(( (               (( (
+ ``-'               ``-'
+    ```}
+].sample
 end
 
 def deepai_text2img(text)
@@ -407,13 +520,6 @@ def deepai_text2img(text)
   JSON.parse(res.body)["output_url"]
 end
 
-def this_fucking_fox
-  deepai_text2img "fox"
-end
-
-def this_fucking_dog
-  deepai_text2img "dog"
-end
 
 def infinite_scream
   # tribute to https://twitter.com/infinite_scream
@@ -574,60 +680,14 @@ def handle_message
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
   when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i #, /ъуъ/i, /уъу/i
-    arr = [%q{```
- _._     _,-'""`-._
-(,-.`._,'(       |\`-/|
-    `-.-' \ )-`( , o o)
-          `-    \`_`"'-
-    ```},
-    %q{```
-    |\__/,|   (`\
-  _.|o o  |_   ) )
--(((---(((--------
-    ```},
-    %q{```
- |\__/,|   (`\
- |_ _  |.--.) )
- ( T   )     /
-(((^_(((/(((_/
-    ```},
-    %q{```
-  |\'/-..--.
- / _ _   ,  ;
-`~=`Y'~_<._./
- <`-....__.'
-    ```},
-    %q{```
-   |\---/|
-   | ,_, |
-    \_`_/-..----.
- ___/ `   ' ,""+ \
-(__...'   __\    |`.___.';
-  (_,...'(_,.`__)/'.....+
-    ```},
-    %q{```
-                        _
-                       | \
-                       | |
-                       | |
-  |\                   | |
- /, ~\                / /
-X     `-.....-------./ /
- ~-. ~  ~              |
-    \             /    |
-     \  /_     ___\   /
-     | /\ ~~~~~   \ |
-     | | \        || |
-     | |\ \       || )
-    (_/ (_/      ((_/
-    ```},
-  ]
-  send_markdown_message arr.sample
+    send_markdown_message this_fucking_cat
     # reply_with_image this_fucking_cat
   when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лис(а|ичка)/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
-    reply_with_image this_fucking_fox
+    # reply_with_image this_fucking_fox
+    send_markdown_message this_fucking_fox
   when /^\/this_fucking_dog(@drrn_bot)?/, /(всратая) соба(ка|чка)/i, /собака с?сутулая/i, /(всратый) п[её]с/i
-    reply_with_image this_fucking_dog
+    # reply_with_image this_fucking_dog
+    send_markdown_message this_fucking_dog
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/ #, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
