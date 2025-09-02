@@ -752,11 +752,11 @@ def handle_inline
       # results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
       #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
       # )
-      results << {
+      results << Telegram::Bot::Types::InlineQueryResultArticle.new(
         id: (i += 1).to_s,
         title: title,
         Telegram::Bot::Types::InputTextMessageContent.new(url)
-      }
+      )
     end
   end
   results
