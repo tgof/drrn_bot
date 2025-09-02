@@ -801,10 +801,21 @@ Telegram::Bot::Client.run(token) do |bot|
       begin
         @bot.api.answer_inline_query(
           inline_query_id: @message.id,
-          results: [results],
+          results: results,
           # cache_time: 1
         )
       rescue => e then puts(e)
+        @bot.api.answer_inline_query(
+          inline_query_id: @message.id,
+          results: [
+            Telegram::Bot::Types::InlineQueryResultArticle.new(
+              id: 99,
+              title: "Ашипка! #{e.message}",
+              input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: e.to_json)
+            )
+          ],
+          # cache_time: 1
+        )
       end
     when Telegram::Bot::Types::Message
       res = handle_message
