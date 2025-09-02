@@ -752,9 +752,11 @@ def handle_inline
       # results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
       #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
       # )
-      results << Telegram::Bot::Types::InputTextMessageContent.new(
-        id: (i += 1).to_s, message_text: url, title: url
-      )
+      results << {
+        id: (i += 1).to_s,
+        title: title
+        Telegram::Bot::Types::InputTextMessageContent.new(url)
+      }
     end
   end
   results
@@ -809,7 +811,7 @@ Telegram::Bot::Client.run(token) do |bot|
           inline_query_id: @message.id,
           results: [
             Telegram::Bot::Types::InlineQueryResultArticle.new(
-              id: 99,
+              id: '99',
               title: "Ашипка! #{e.message}",
               input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(message_text: e.to_json)
             )
