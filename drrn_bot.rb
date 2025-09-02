@@ -543,11 +543,11 @@ def handle_message
   case @message.text
   when /^\/update(@drrn_bot)?(\s+.*|$)/
     return 'Пошел нахуй.' unless admin_ids.include?(@message.from.id)
-
+    restart_timer = 15
     delta = Time.now - start_time
-    if delta < 60 # если перегружались меньше минуты назад
+    if delta < restart_timer # если перегружались меньше минуты назад
       return "Сейчас мы тут: #{%x{git show --oneline -s}}\n\
-До следующего возможного перезапуска #{(60 - delta).to_i} секунд."
+До следующего возможного перезапуска #{(restart_timer - delta).to_i} секунд."
     end
 
     query = @message.text.sub(/\/update(@drrn_bot)?\s*/, '')
@@ -723,7 +723,7 @@ end
 
 def handle_inline
   p query = @message.query
-  i = 1
+  i = 0
   results = [
     ['Пожать плечами', { message_text: "#{query} ¯\\_(ツ)_/¯" }],
     ['Перевернуть стол!', { message_text: "#{query} #{tableflip_str}" }],
@@ -743,17 +743,20 @@ def handle_inline
       input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(msg_content)
     )
   end
-  # if query[/всратый/i]
-  #   {
-  #     this_fucking_cat => 'Всратый кот.',
-  #     this_fucking_fox => 'Всратый лис.',
-  #     this_fucking_dog => 'Всратый пес.',
-  #   }.each do |url, title|
-  #     results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-  #       id: (i += 1), photo_url: url, thumb_url: url, title: title,
-  #     )
-  #   end
-  # end
+  if query[/всратый/i]
+    {
+      this_fucking_cat => 'Всратый кот.',
+      this_fucking_fox => 'Всратый лис.',
+      this_fucking_dog => 'Всратый пес.',
+    }.each do |url, title|
+      # results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+      #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
+      # )
+      results << Telegram::Bot::Types::InputTextMessageContent.new(
+        id: (i += 1), message_text: url
+      )
+    end
+  end
   results
 end
 
