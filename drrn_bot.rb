@@ -533,14 +533,14 @@ def handle_message
   when /^\/should_?i(@drrn_bot)?\s*$/
     'Тупить? Тупить не нужно.'
   when /^\/should_?i(@drrn_bot)?(\s+.*|$)/
-    kb = [[
+    kb = [
       Telegram::Bot::Types::InlineKeyboardButton.new(
         text: 'Да', callback_data: "#{@message.chat.id}~answer-да"
       ),
       Telegram::Bot::Types::InlineKeyboardButton.new(
         text: 'Нет', callback_data: "#{@message.chat.id}~answer-нет"
       )
-    ]]
+    ]
     markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(inline_keyboard: kb)
     res = dataline "shouldi_answers"
     res += "\n_Этот ответ был полезен?_"
@@ -622,7 +622,7 @@ X     `-.....-------./ /
     (_/ (_/      ((_/
     ```},
   ].sample
-    reply_with_image this_fucking_cat
+    # reply_with_image this_fucking_cat
   when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лис(а|ичка)/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     reply_with_image this_fucking_fox
   when /^\/this_fucking_dog(@drrn_bot)?/, /(всратая) соба(ка|чка)/i, /собака с?сутулая/i, /(всратый) п[её]с/i
