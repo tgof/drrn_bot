@@ -621,7 +621,8 @@ X     `-.....-------./ /
      | |\ \       || )
     (_/ (_/      ((_/
     ```},
-  ].sample
+  ]
+  send_markdown_message arr.sample
     # reply_with_image this_fucking_cat
   when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лис(а|ичка)/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     reply_with_image this_fucking_fox
