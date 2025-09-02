@@ -679,6 +679,8 @@ def handle_message
     end
   when /шерстяная колбаса/i
     send_markdown_message fur_sausage
+  when /^\/всратый_код(@drrn_bot)?/
+    'https://github.com/tgof/drrn_bot'
   when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i #, /ъуъ/i, /уъу/i
     send_markdown_message this_fucking_cat
     # reply_with_image this_fucking_cat
