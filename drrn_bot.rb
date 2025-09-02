@@ -738,7 +738,7 @@ def handle_inline
   end
   results.map! do |title, msg_content|
     Telegram::Bot::Types::InlineQueryResultArticle.new(
-      id: (i += 1),
+      id: (i += 1).to_s,
       title: title,
       input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(msg_content)
     )
@@ -753,7 +753,7 @@ def handle_inline
       #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
       # )
       results << Telegram::Bot::Types::InputTextMessageContent.new(
-        id: (i += 1), message_text: url
+        id: (i += 1).to_s, message_text: url, title: url
       )
     end
   end
@@ -802,7 +802,7 @@ Telegram::Bot::Client.run(token) do |bot|
         @bot.api.answer_inline_query(
           inline_query_id: @message.id,
           results: results,
-          # cache_time: 1
+          cache_time: 1
         )
       rescue => e then puts(e)
         @bot.api.answer_inline_query(
