@@ -801,7 +801,7 @@ Telegram::Bot::Client.run(token) do |bot|
       begin
         @bot.api.answer_inline_query(
           inline_query_id: @message.id,
-          results: results,
+          results: [results],
           # cache_time: 1
         )
       rescue => e then puts(e)
