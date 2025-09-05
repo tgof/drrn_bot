@@ -391,10 +391,10 @@ end
 
 def this_fucking_cat
   # "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
-  if @deepai_token
-    reply_with_image deepai_text2img "cat"
-    return
-  end
+if @deepai_token
+  reply_with_image deepai_text2img "cat"
+  return
+end
 
 tmp = [%q{```
  _._     _,-'""`-._
@@ -543,7 +543,7 @@ end
 
 def reply_with_image(image_url)
   unless image_url
-    @bot.api.send_message(chat_id: @message.chat.id, text: "А вот и нифига! #{@deepai_token.inspect}")
+    @bot.api.send_message(chat_id: @message.chat.id, text: 'А вот и нифига!')
     return
   end
   @bot.api.send_photo(
