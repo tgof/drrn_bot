@@ -396,7 +396,7 @@ if @deepai_token
   return
 end
 
-send_markdown_message [%q{```
+tmp = [%q{```
  _._     _,-'""`-._
 (,-.`._,'(       |\`-/|
     `-.-' \ )-`( , o o)
@@ -444,15 +444,16 @@ X     `-.....-------./ /
     (_/ (_/      ((_/
     ```},
 ].sample
+  send_markdown_message tmp
 end
 
 def this_fucking_fox
   if @deepai_token
     reply_with_image deepai_text2img "fox"
     return
-  else
+  end
 
-  send_markdown_message [%q{```
+  tmp = [%q{```
   _,-=._              /|_/|
   `-.\}   `=._,.-=-._.,  @ @._,
      `._ _,-.   )      _,.-'
@@ -497,15 +498,16 @@ def this_fucking_fox
 `.;;;:='    ~~            ~~~                ~-    -       -   -
     ```},
 ].sample
+send_markdown_message tmp
 end
 
 def this_fucking_dog
   if @deepai_token
     reply_with_image deepai_text2img "dog"
     return
-  else
+  end
 
-  send_markdown_message [%q{```
+  tmp = [%q{```
                         __
  ,                    ," e`--o
 ((                   (  | __,'
@@ -516,6 +518,7 @@ def this_fucking_dog
  ``-'               ``-'
     ```}
 ].sample
+send_markdown_message tmp
 end
 
 def deepai_text2img(text)
