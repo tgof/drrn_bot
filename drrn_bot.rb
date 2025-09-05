@@ -10,7 +10,7 @@ end
 puts start_time
 
 token = File.read('data/token.txt', encoding: 'UTF-8').lines.first.delete("\n")
-@deepai_token = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n")
+@deepai_token = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n") rescue nil
 @deepai_token = nil if @deepai_token&.empty?
 def admin_ids
   @admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
