@@ -11,6 +11,7 @@ puts start_time
 
 token = File.read('data/token.txt', encoding: 'UTF-8').lines.first.delete("\n")
 @deepai_token = File.read('data/ai.txt', encoding: 'UTF-8').lines.first.delete("\n")
+@deepai_token = nil if @deepai_token&.empty?
 def admin_ids
   @admin_ids ||= File.read('data/admins.txt').split("\n").map(&:to_i).compact
 end
@@ -390,9 +391,12 @@ end
 
 def this_fucking_cat
   # "https://thiscatdoesnotexist.com/?сrutch=#{Time.now.to_i}"
-  # deepai_text2img "cat"
+if @deepai_token
+  reply_with_image deepai_text2img "cat"
+  return
+end
 
-[%q{```
+send_markdown_message [%q{```
  _._     _,-'""`-._
 (,-.`._,'(       |\`-/|
     `-.-' \ )-`( , o o)
@@ -443,8 +447,12 @@ X     `-.....-------./ /
 end
 
 def this_fucking_fox
-  # deepai_text2img "fox"
-  [%q{```
+  if @deepai_token
+    reply_with_image deepai_text2img "fox"
+    return
+  else
+
+  send_markdown_message [%q{```
   _,-=._              /|_/|
   `-.\}   `=._,.-=-._.,  @ @._,
      `._ _,-.   )      _,.-'
@@ -492,8 +500,12 @@ def this_fucking_fox
 end
 
 def this_fucking_dog
-  # deepai_text2img "dog"
-    [%q{```
+  if @deepai_token
+    reply_with_image deepai_text2img "dog"
+    return
+  else
+
+  send_markdown_message [%q{```
                         __
  ,                    ," e`--o
 ((                   (  | __,'
@@ -682,14 +694,14 @@ def handle_message
   when /всратый код/
     'https://github.com/tgof/drrn_bot'
   when /^\/this_fucking_cat(@drrn_bot)?/, /всрат(ый ко(т|шак)|ая ко(тя|ша)ра)/i, /всратая ша(у|ве)рма/i, /(шерстяной|пушистый) пид(а|о)рас/i #, /ъуъ/i, /уъу/i
-    send_markdown_message this_fucking_cat
+    this_fucking_cat
     # reply_with_image this_fucking_cat
   when /^\/this_fucking_fox(@drrn_bot)?/, /(шерстяная|съедобная|всратая) лис(а|ичка)/i, /(шерстяной|съедобный|всратый) лис(ец)?/i
     # reply_with_image this_fucking_fox
-    send_markdown_message this_fucking_fox
+    this_fucking_fox
   when /^\/this_fucking_dog(@drrn_bot)?/, /(всратая) соба(ка|чка)/i, /собака с?сутулая/i, /(всратый) п[её]с/i
     # reply_with_image this_fucking_dog
-    send_markdown_message this_fucking_dog
+    this_fucking_dog
   when /^\/(cppref|tableflip)(@drrn_bot)?(\s+.*|$)/ #, /блэт/i, /жеваный крот/i, /фак\b/i, /fuck/i
     query = @message.text.sub(/\/(cppref|tableflip)(@drrn_bot)?\s*/, '')
     "#{query} #{tableflip_str}"
@@ -743,22 +755,22 @@ def handle_inline
       input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(msg_content)
     )
   end
-  if query[/всратый/i]
-    {
-      this_fucking_cat => 'Всратый кот.',
-      this_fucking_fox => 'Всратый лис.',
-      this_fucking_dog => 'Всратый пес.',
-    }.each do |url, title|
-      # results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-      #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
-      # )
-      results << Telegram::Bot::Types::InlineQueryResultArticle.new(
-        id: (i += 1).to_s,
-        title: title,
-        input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(url)
-      )
-    end
-  end
+  # if query[/всратый/i]
+  #   {
+  #     this_fucking_cat => 'Всратый кот.',
+  #     this_fucking_fox => 'Всратый лис.',
+  #     this_fucking_dog => 'Всратый пес.',
+  #   }.each do |url, title|
+  #     # results << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+  #     #   id: (i += 1), photo_url: url, thumb_url: url, title: title,
+  #     # )
+  #     results << Telegram::Bot::Types::InlineQueryResultArticle.new(
+  #       id: (i += 1).to_s,
+  #       title: title,
+  #       input_message_content: Telegram::Bot::Types::InputTextMessageContent.new(url)
+  #     )
+  #   end
+  # end
   results
 end
 
