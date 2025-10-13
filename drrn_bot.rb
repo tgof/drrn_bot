@@ -748,6 +748,7 @@ def handle_inline
     ['Вжухни!', { message_text: vzhuh_str(query)}]
   ]
   unless query.empty?
+    results << ['Кинуть кубы!', { message_text: roll(query) }]
     results << ['...чертов гук!', { message_text: goddamn_guk(query) }]
     results << ['Больше Х богу Х!', { message_text: "Больше #{query} богу #{query}!" }]
   end
